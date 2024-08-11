@@ -1,6 +1,8 @@
 
 import 'package:fitness_tracker_app/reposotiry/workoutrepository.dart';
 import 'package:fitness_tracker_app/view/home_screen.dart';
+import 'package:fitness_tracker_app/view/workout_list.dart';
+import 'package:fitness_tracker_app/view/workout_summery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Fitness Tracker App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -28,7 +31,9 @@ class MyApp extends StatelessWidget {
         child: BlocProvider(
           create: (context) => WorkoutBloc(context.read<WorkoutRepository>())
             ..add(LoadWorkouts()),
+          // child:  WorkoutList(),
           child:  HomeScreen(),
+         // child:  WorkoutSummaryPage(),
         ),
       ),
     );

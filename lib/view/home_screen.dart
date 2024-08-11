@@ -1,37 +1,32 @@
+import 'package:fitness_tracker_app/view/settings.dart';
+import 'package:fitness_tracker_app/view/stats.dart';
+import 'package:fitness_tracker_app/view/workoutcalculator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/workout_bloc.dart';
-import '../bloc/workout_state.dart';
-import '../widget/textformfield.dart';
-import '../widget/workout_formfield.dart';
+import 'workout_list.dart';
+
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _nameController = TextEditingController();
-  final _durationController = TextEditingController();
-  String dropdownValue = 'Select Workout Type';
+  int _selectedIndex = 0;
 
-  // Map to hold calorie burn rates per minute
-  final Map<String, int> calorieRates = {
-    'Running': 10,
-    'Walking': 5,
-    'PushUP': 8,
-    'Endurance': 7,
-  };
+  // List of pages to navigate between
+  final List<Widget> _pages = [
+    const WorkoutCalculator(),
+    const WorkoutList(),
+    const StatsPage(),
+    const SettingsPage(),
+    // Assuming WorkoutList is a page to display workout details
+  ];
 
-  void _calculateCalories() {
-    final duration = int.tryParse(_durationController.text) ?? 0;
-    final rate = calorieRates[dropdownValue] ?? 0;
-    final totalCalories = duration * rate;
-
+  void _onItemTapped(int index) {
     setState(() {
-      _nameController.text = totalCalories.toString(); // Update controller text
+      _selectedIndex = index;
     });
   }
 
@@ -40,57 +35,52 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fitness Tracker'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            onPressed: () {
+              // Navigate to WorkoutList screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const WorkoutList()),
+              );
+            },
+          ),
+        ],
       ),
-      body: BlocBuilder<WorkoutBloc, WorkoutState>(
-        builder: (context, state) {
-          if (state is WorkoutsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is WorkoutsLoaded) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Workout Calculator',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    WorkoutFormField(
-                      label: 'Workout Type',
-                      dropdownValue: dropdownValue,
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            dropdownValue = newValue;
-                            _calculateCalories(); // Recalculate calories when workout type changes
-                          });
-                        }
-                      },
-                    ),
-                    WorkoutTextFormField(
-                      label: 'Duration (in minutes)',
-                      controller: _durationController,
-                      onChanged: (text) {
-                        _calculateCalories(); // Recalculate calories when duration changes
-                      },
-                    ),
-                    WorkoutTextFormField(
-                      label: 'Burn Calories',
-                      controller: _nameController,
-                      readOnly: true,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          } else {
-            return const Center(child: Text('Something went wrong!'));
-          }
-        },
+      body: _pages[_selectedIndex], // Display the selected page
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Workouts',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart),
+            label: 'Stats',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.blueGrey, // Set background color
+        selectedItemColor: Colors.amber, // Color of selected icon and label
+        unselectedItemColor: Colors.white70, // Color of unselected icons and labels
+        showUnselectedLabels: true, // Show labels for unselected items
+        type: BottomNavigationBarType.fixed, // Ensures the text and icons remain at a fixed size
+        elevation: 10, // Add a shadow to the bar
+        selectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
