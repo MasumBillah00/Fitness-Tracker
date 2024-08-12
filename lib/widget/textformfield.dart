@@ -7,12 +7,12 @@ class WorkoutTextFormField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   const WorkoutTextFormField({
-    Key? key,
+    super.key,
     required this.label,
     required this.controller,
     this.readOnly = false,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

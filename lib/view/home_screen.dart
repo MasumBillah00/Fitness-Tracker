@@ -1,6 +1,7 @@
 import 'package:fitness_tracker_app/view/settings.dart';
 import 'package:fitness_tracker_app/view/stats.dart';
 import 'package:fitness_tracker_app/view/workoutcalculator.dart';
+import 'package:fitness_tracker_app/widget/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'workout_list.dart';
 
@@ -35,19 +36,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fitness Tracker'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.list),
-            onPressed: () {
-              // Navigate to WorkoutList screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const WorkoutList()),
-              );
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.list),
+        //     onPressed: () {
+        //       // Navigate to WorkoutList screen
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(builder: (context) =>  Fitness_Drawer(onItemTapped: _onItemTapped)),
+        //       );
+        //     },
+        //   ),
+        //
+        // ],
+
       ),
+      drawer: Fitness_Drawer(onItemTapped: _onItemTapped),
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
         items: const [

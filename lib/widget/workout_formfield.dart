@@ -6,11 +6,11 @@ class WorkoutFormField extends StatelessWidget {
   final ValueChanged<String?> onChanged;
 
   const WorkoutFormField({
-    Key? key,
+    super.key,
     required this.label,
     required this.dropdownValue,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

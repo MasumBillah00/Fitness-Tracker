@@ -3,11 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/workout_bloc.dart';
 import '../bloc/workout_state.dart';
 import '../bloc/workout_event.dart';
-import '../model/workout_model.dart';
 import 'package:intl/intl.dart'; // For date formatting
 
 class WorkoutList extends StatelessWidget {
-  const WorkoutList({Key? key}) : super(key: key);
+  const WorkoutList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,43 +19,136 @@ class WorkoutList extends StatelessWidget {
           if (state is WorkoutsLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is WorkoutsLoaded) {
-            return SingleChildScrollView(
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('Date')), // New column for Date
-                  DataColumn(label: Text('Type')),
-                  DataColumn(label: Text('Duration')),
-                  DataColumn(label: Text('Calories')),
-                  DataColumn(label: Text('Action')),
-                ],
-                rows: state.workouts.map((workout) {
-                  return DataRow(cells: [
-                    DataCell(Text(DateFormat('MM-dd').format(workout.date))), // Display formatted date
-                    DataCell(Text(workout.type)),
-                    DataCell(Text('${workout.duration} min')),
-                    DataCell(Text('${workout.calories}')),
-                    DataCell(
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          context.read<WorkoutBloc>().add(DeleteWorkout(workout.id!));
-                        },
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                // Allocate width proportionately or use flexible widgets
+                final width = constraints.maxWidth;
+                //final columnWidth = width / 15;
+                final dateWidth = width * .09;   // 15% for date
+                final typeWidth = width * 0.17;   // 25% for type
+                final durationWidth = width * 0.12; // 20% for duration
+                final caloriesWidth = width * 0.15; // 20% for calories
+                final actionWidth = width * 0.2;  // 20% for action
+
+                return SingleChildScrollView(
+                  child: Column(
+
+                    children: [
+                      DataTable(
+                        columnSpacing: 20,
+                        columns: [
+                          DataColumn(
+                            label: SizedBox(
+                              width: dateWidth,
+                              child: const Text('Date', textAlign: TextAlign.center),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: typeWidth,
+                              child: const Text('Type', textAlign: TextAlign.center),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: durationWidth,
+                              child: const Text('Duration', textAlign: TextAlign.center),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: caloriesWidth,
+                              child: const Text('Calories', textAlign: TextAlign.center),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: actionWidth,
+                              child: const Text('Action', textAlign: TextAlign.center),
+                            ),
+                          ),
+                        ],
+                        rows: state.workouts.map((workout) {
+                          return DataRow(
+                            cells: [
+                              DataCell(
+                                SizedBox(
+                                  width: dateWidth,
+                                  child: Text(
+                                    DateFormat('MM-dd').format(workout.date),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                SizedBox(
+                                  width: typeWidth,
+                                  child: Text(
+                                    workout.type,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                SizedBox(
+                                  width: durationWidth,
+                                  child: Text(
+                                    '${workout.duration} min',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                SizedBox(
+                                  width: caloriesWidth,
+                                  child: Text(
+                                    '${workout.calories}',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                SizedBox(
+                                  width: actionWidth,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () {
+                                      context
+                                          .read<WorkoutBloc>()
+                                          .add(DeleteWorkout(workout.id!));
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList()
+                          ..add(
+                            DataRow(
+                              cells: [
+                                const DataCell(SizedBox(width: 0)), // Spacer
+                                const DataCell(Text('Total', textAlign: TextAlign.center)),
+                                DataCell(
+                                  Text(
+                                    '${state.workouts.fold(0, (sum, workout) => sum + workout.duration)} min',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                DataCell(
+                                  Text(
+                                    '${state.workouts.fold(0, (sum, workout) => sum + workout.calories)}',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const DataCell(SizedBox(width: 0)), // Spacer
+                              ],
+                            ),
+                          ),
                       ),
-                    ),
-                  ]);
-                }).toList()
-                  ..add(
-                    DataRow(
-                      cells: [
-                        const DataCell(Text('Total')),
-                        const DataCell(Text('')), // Empty cell for the Date column
-                        DataCell(Text('${state.workouts.fold(0, (sum, workout) => sum + workout.duration)} min')),
-                        DataCell(Text('${state.workouts.fold(0, (sum, workout) => sum + workout.calories)}')),
-                        const DataCell(Text('')),
-                      ],
-                    ),
+                    ],
                   ),
-              ),
+                );
+              },
             );
           } else {
             return const Center(child: Text('Something went wrong!'));

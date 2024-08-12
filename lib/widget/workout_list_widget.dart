@@ -1,4 +1,3 @@
-// lib/widgets/workout_list.dart
 
 import 'package:flutter/material.dart';
 import '../model/workout_model.dart';
@@ -6,7 +5,7 @@ import '../model/workout_model.dart';
 class WorkoutList extends StatelessWidget {
   final List<Workout> workouts;
 
-  const WorkoutList({Key? key, required this.workouts}) : super(key: key);
+  const WorkoutList({super.key, required this.workouts});
 
   @override
   Widget build(BuildContext context) {

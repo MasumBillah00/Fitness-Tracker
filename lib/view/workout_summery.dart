@@ -5,7 +5,7 @@ import '../bloc/workout_state.dart';
 import '../model/workout_model.dart';
 
 class WorkoutSummaryPage extends StatelessWidget {
-  const WorkoutSummaryPage({Key? key}) : super(key: key);
+  const WorkoutSummaryPage({super.key});
 
   @override
   Widget build(BuildContext context) {

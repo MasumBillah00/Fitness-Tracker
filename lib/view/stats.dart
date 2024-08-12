@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/workout_bloc.dart';
 import '../bloc/workout_state.dart';
 import '../model/workout_model.dart';
+import 'package:intl/intl.dart';
+import 'calories_progress.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
@@ -21,6 +23,7 @@ class StatsPage extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is WorkoutsLoaded) {
             final workoutData = _aggregateWorkoutData(state.workouts);
+            final dailyCalories = _aggregateDailyCalories(state.workouts);
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -37,23 +40,45 @@ class StatsPage extends StatelessWidget {
                   Expanded(
                     child: BarChart(
                       BarChartData(
-                        titlesData: FlTitlesData(show: true),
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                return Text(workoutData.keys.elementAt(value.toInt()));
+                              },
+                            ),
+                          ),
+                        ),
                         borderData: FlBorderData(show: false),
                         barGroups: _createBarGroups(workoutData),
-                        gridData: FlGridData(show: false),
+                        gridData: const FlGridData(show: false),
                       ),
                     ),
                   ),
-
-                  TextButton(onPressed:() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const WeeklyChart(workouts: [])),
-                    );
-                  },
-                      child: Text('WeeklyChart'))
-                  //WeeklyChart(workouts: state.workouts),
-
+                  const SizedBox(height: 16.0),
+                  const Text(
+                    'Calories Burn Progress',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Expanded(
+                    child: CaloriesProgressChart(dailyCalories: dailyCalories),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WeeklyChart(workouts: state.workouts),
+                        ),
+                      );
+                    },
+                    child: const Text('Weekly Chart'),
+                  ),
                 ],
               ),
             );
@@ -78,6 +103,20 @@ class StatsPage extends StatelessWidget {
     return data;
   }
 
+  Map<String, int> _aggregateDailyCalories(List<Workout> workouts) {
+    final Map<String, int> data = {};
+
+    for (var workout in workouts) {
+      final date = DateFormat('yyyy-MM-dd').format(workout.date);
+      if (data.containsKey(date)) {
+        data[date] = data[date]! + workout.calories;
+      } else {
+        data[date] = workout.calories;
+      }
+    }
+    return data;
+  }
+
   List<BarChartGroupData> _createBarGroups(Map<String, int> data) {
     return data.entries.map((entry) {
       return BarChartGroupData(
@@ -85,7 +124,7 @@ class StatsPage extends StatelessWidget {
         barRods: [
           BarChartRodData(
             toY: entry.value.toDouble(),
-            color: Colors.blue,
+            color: Colors.blueGrey.shade700,
             width: 16,
           ),
         ],
