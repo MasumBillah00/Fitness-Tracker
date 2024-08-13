@@ -1,5 +1,6 @@
 import 'package:fitness_tracker_app/view/settings.dart';
 import 'package:fitness_tracker_app/view/stats.dart';
+import 'package:fitness_tracker_app/view/total_workout_stats.dart';
 import 'package:fitness_tracker_app/view/workoutcalculator.dart';
 import 'package:fitness_tracker_app/widget/drawer_widget.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
     const WorkoutCalculator(),
     const WorkoutList(),
     const StatsPage(),
-    const SettingsPage(),
+    const TotalWorkoutStats(),
+    //const SettingsPage(),
     // Assuming WorkoutList is a page to display workout details
   ];
 
@@ -33,57 +35,59 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fitness Tracker'),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.list),
-        //     onPressed: () {
-        //       // Navigate to WorkoutList screen
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(builder: (context) =>  Fitness_Drawer(onItemTapped: _onItemTapped)),
-        //       );
-        //     },
-        //   ),
-        //
-        // ],
-
-      ),
-      drawer: Fitness_Drawer(onItemTapped: _onItemTapped),
-      body: _pages[_selectedIndex], // Display the selected page
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Fitness Tracker'),
+          // actions: [
+          //   IconButton(
+          //     icon: const Icon(Icons.list),
+          //     onPressed: () {
+          //       // Navigate to WorkoutList screen
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (context) =>  Fitness_Drawer(onItemTapped: _onItemTapped)),
+          //       );
+          //     },
+          //   ),
+          //
+          // ],
+      
+        ),
+        drawer: Fitness_Drawer(onItemTapped: _onItemTapped),
+        body: _pages[_selectedIndex], // Display the selected page
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+      
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'Workouts',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart),
+              label: 'Stats',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'OVERVIEW',
+            ),
+      
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          backgroundColor: Colors.blueGrey, // Set background color
+          selectedItemColor: Colors.amber, // Color of selected icon and label
+          unselectedItemColor: Colors.white70, // Color of unselected icons and labels
+          showUnselectedLabels: true, // Show labels for unselected items
+          type: BottomNavigationBarType.fixed, // Ensures the text and icons remain at a fixed size
+          elevation: 10, // Add a shadow to the bar
+          selectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
           ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Workouts',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Stats',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        backgroundColor: Colors.blueGrey, // Set background color
-        selectedItemColor: Colors.amber, // Color of selected icon and label
-        unselectedItemColor: Colors.white70, // Color of unselected icons and labels
-        showUnselectedLabels: true, // Show labels for unselected items
-        type: BottomNavigationBarType.fixed, // Ensures the text and icons remain at a fixed size
-        elevation: 10, // Add a shadow to the bar
-        selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

@@ -1,4 +1,5 @@
 
+import 'package:fitness_tracker_app/view/total_workout_stats.dart';
 import 'package:flutter/material.dart';
 
 class Fitness_Drawer extends StatelessWidget {
@@ -79,6 +80,7 @@ class Fitness_Drawer extends StatelessWidget {
                   },
                 ),
               ),
+
               Card(
                 color: Colors.black26,
                 child: ListTile(
@@ -97,6 +99,7 @@ class Fitness_Drawer extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+
               // Card(
               //   child: ListTile(
               //     leading: const Icon(Icons.logout),

@@ -1,5 +1,6 @@
 import 'package:fitness_tracker_app/reposotiry/workoutrepository.dart';
 import 'package:fitness_tracker_app/view/home_screen.dart';
+import 'package:fitness_tracker_app/view/total_workout_stats.dart';
 import 'package:fitness_tracker_app/widget/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

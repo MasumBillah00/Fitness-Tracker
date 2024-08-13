@@ -1,4 +1,4 @@
-import 'package:fitness_tracker_app/view/total_workout_stats.dart';
+import 'package:fitness_tracker_app/view/stats.dart';
 import 'package:fitness_tracker_app/view/weekly_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -9,15 +9,13 @@ import '../model/workout_model.dart';
 import 'package:intl/intl.dart';
 import 'calories_progress.dart';
 
-class StatsPage extends StatelessWidget {
-  const StatsPage({super.key});
+class TotalWorkoutStats extends StatelessWidget {
+  const TotalWorkoutStats({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Workout Stats'),
-      ),
+
       body: BlocBuilder<WorkoutBloc, WorkoutState>(
         builder: (context, state) {
           if (state is WorkoutsLoading) {
@@ -31,7 +29,7 @@ class StatsPage extends StatelessWidget {
               child: Column(
                 children: [
                   const Text(
-                    'Daily Workout Stats',
+                    'Total Workout Stats',
                     style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
@@ -57,49 +55,30 @@ class StatsPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
+                  // const SizedBox(height: 16.0),
+                  // const Text(
+                  //   'Calories Burn Progress',
+                  //   style: TextStyle(
+                  //     fontSize: 20.0,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                   const SizedBox(height: 16.0),
-                  const Text(
-                    'Calories Burn Progress',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Expanded(
-                    child: CaloriesProgressChart(dailyCalories: dailyCalories),
-                  ),
-
+                  // Expanded(
+                  //   child: CaloriesProgressChart(dailyCalories: dailyCalories),
+                  // ),
                   // TextButton(
                   //   onPressed: () {
-                  //     Navigator.of(context).push(
+                  //     Navigator.push(
+                  //       context,
                   //       MaterialPageRoute(
-                  //         builder: (context) => BlocProvider.value(
-                  //           value: BlocProvider.of<WorkoutBloc>(context),
-                  //           child: const TotalWorkoutStats(),
-                  //         ),
+                  //         builder: (context) => StatsPage(),
                   //       ),
                   //     );
                   //   },
-                  //   child: const Text('Total Workout Stats'),
+                  //   child: const Text('Weekly Chart'),
                   // ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => BlocProvider.value(
-                        value: BlocProvider.of<WorkoutBloc>(context),
-                        child: const TotalWorkoutStats(),
-                      ),
-                    ),
-                  );
-                },
-                child: const Text('Total Workout Stats'),
-              ),
-
-
-              ],
+                ],
               ),
             );
           } else {
@@ -112,18 +91,12 @@ class StatsPage extends StatelessWidget {
 
   Map<String, int> _aggregateWorkoutData(List<Workout> workouts) {
     final Map<String, int> data = {};
-    final currentDate = DateTime.now();
-    final today = DateFormat('yyyy-MM-dd').format(currentDate);
 
     for (var workout in workouts) {
-      final workoutDate = DateFormat('yyyy-MM-dd').format(workout.date);
-      if (workoutDate == today) {
-        // Filter workouts for today
-        if (data.containsKey(workout.type)) {
-          data[workout.type] = data[workout.type]! + workout.duration;
-        } else {
-          data[workout.type] = workout.duration;
-        }
+      if (data.containsKey(workout.type)) {
+        data[workout.type] = data[workout.type]! + workout.duration;
+      } else {
+        data[workout.type] = workout.duration;
       }
     }
     return data;
@@ -131,18 +104,13 @@ class StatsPage extends StatelessWidget {
 
   Map<String, int> _aggregateDailyCalories(List<Workout> workouts) {
     final Map<String, int> data = {};
-    final currentDate = DateTime.now();
-    final today = DateFormat('yyyy-MM-dd').format(currentDate);
 
     for (var workout in workouts) {
-      final workoutDate = DateFormat('yyyy-MM-dd').format(workout.date);
-      if (workoutDate == today) {
-        // Filter workouts for today
-        if (data.containsKey(today)) {
-          data[today] = data[today]! + workout.calories;
-        } else {
-          data[today] = workout.calories;
-        }
+      final date = DateFormat('yyyy-MM-dd').format(workout.date);
+      if (data.containsKey(date)) {
+        data[date] = data[date]! + workout.calories;
+      } else {
+        data[date] = workout.calories;
       }
     }
     return data;
