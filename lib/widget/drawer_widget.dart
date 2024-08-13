@@ -1,5 +1,5 @@
 
-import 'package:fitness_tracker_app/view/total_workout_stats.dart';
+import 'package:fitness_tracker_app/view/stats/total_workout_stats.dart';
 import 'package:flutter/material.dart';
 
 class Fitness_Drawer extends StatelessWidget {

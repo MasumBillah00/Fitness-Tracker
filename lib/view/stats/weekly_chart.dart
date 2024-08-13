@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../model/workout_model.dart';
+import '../../model/workout_model.dart';
 
 class WeeklyChart extends StatelessWidget {
   final List<Workout> workouts;

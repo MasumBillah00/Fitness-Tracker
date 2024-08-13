@@ -19,7 +19,6 @@ class _WorkoutCalculatorState extends State<WorkoutCalculator> {
   final _caloriesController = TextEditingController();
   String dropdownValue = 'Select Workout Type';
 
-
   final Map<String, int> calorieRates = {
     'Running': 10,
     'Walking': 5,
@@ -27,14 +26,13 @@ class _WorkoutCalculatorState extends State<WorkoutCalculator> {
     'Endurance': 7,
   };
 
-
   void _calculateCalories() {
     final duration = int.tryParse(_durationController.text) ?? 0;
     final rate = calorieRates[dropdownValue] ?? 0;
     final totalCalories = duration * rate;
 
     setState(() {
-     // _durationController.text = totalCalories.toString();
+      // _durationController.text = totalCalories.toString();
       _caloriesController.text = totalCalories.toString(); // Update controller text
     });
   }
@@ -77,8 +75,6 @@ class _WorkoutCalculatorState extends State<WorkoutCalculator> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -99,10 +95,12 @@ class _WorkoutCalculatorState extends State<WorkoutCalculator> {
               dropdownValue: dropdownValue,
               onChanged: (String? newValue) {
                 if (newValue != null) {
-                  setState(() {
-                    dropdownValue = newValue;
-                    _calculateCalories(); // Recalculate calories when workout type changes
-                  });
+                  setState(
+                    () {
+                      dropdownValue = newValue;
+                      _calculateCalories(); // Recalculate calories when workout type changes
+                    },
+                  );
                 }
               },
             ),
