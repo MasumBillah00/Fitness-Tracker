@@ -106,18 +106,22 @@ class StatsPage extends StatelessWidget {
                   // Expanded(
                   //   child: CaloriesProgressChart(dailyCalories: dailyCalories),
                   // ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (newContext) => BlocProvider.value(
-                            value: BlocProvider.of<WorkoutBloc>(context),
-                            child: const TotalWorkoutStats(),
+                  const SizedBox(height: 10,),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (newContext) => BlocProvider.value(
+                              value: BlocProvider.of<WorkoutBloc>(context),
+                              child: const TotalWorkoutStats(),
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: const Text('Total Workout Stats'),
+                        );
+                      },
+                      child: const Text('Total Workout Stats'),
+                    ),
                   ),
                 ],
               ),
