@@ -1,5 +1,4 @@
 import 'package:fitness_tracker_app/view/stats/total_workout_stats.dart';
-import 'package:fitness_tracker_app/view/stats/weekly_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,9 +14,9 @@ class StatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Workout Stats'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Workout Stats'),
+      // ),
       body: BlocBuilder<WorkoutBloc, WorkoutState>(
         builder: (context, state) {
           if (state is WorkoutsLoading) {
@@ -25,13 +24,23 @@ class StatsPage extends StatelessWidget {
           } else if (state is WorkoutsLoaded) {
             final workoutData = _aggregateWorkoutData(state.workouts);
             final dailyCalories = _aggregateDailyCalories(state.workouts);
+            final caloriesByType = _aggregateCaloriesByType(state.workouts);
+
+            if (workoutData.isEmpty) {
+              return const Center(
+                child: Text(
+                  'No data available',
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                ),
+              );
+            }
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
                   const Text(
-                    'Daily Workout Stats',
+                    'Stats By Time',
                     style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
@@ -59,7 +68,7 @@ class StatsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   const Text(
-                    'Calories Burn Progress',
+                    'Calories Burned',
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
@@ -67,16 +76,43 @@ class StatsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   Expanded(
-                    child: CaloriesProgressChart(dailyCalories: dailyCalories),
+                    child: BarChart(
+                      BarChartData(
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                return Text(caloriesByType.keys.elementAt(value.toInt()));
+                              },
+                            ),
+                          ),
+                        ),
+                        borderData: FlBorderData(show: false),
+                        barGroups: _createBarGroups(caloriesByType),
+                        gridData: const FlGridData(show: false),
+                      ),
+                    ),
                   ),
-
+                  const SizedBox(height: 16.0),
+                  // const Text(
+                  //   'Calories Burn Progress',
+                  //   style: TextStyle(
+                  //     fontSize: 20.0,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 16.0),
+                  // Expanded(
+                  //   child: CaloriesProgressChart(dailyCalories: dailyCalories),
+                  // ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (newContext) => BlocProvider.value(
-                            value: BlocProvider.of<WorkoutBloc>(context), // Get the bloc from the current context
-                            child: const TotalWorkoutStats(), // or any other page that needs the bloc
+                            value: BlocProvider.of<WorkoutBloc>(context),
+                            child: const TotalWorkoutStats(),
                           ),
                         ),
                       );
@@ -102,7 +138,6 @@ class StatsPage extends StatelessWidget {
     for (var workout in workouts) {
       final workoutDate = DateFormat('yyyy-MM-dd').format(workout.date);
       if (workoutDate == today) {
-        // Filter workouts for today
         if (data.containsKey(workout.type)) {
           data[workout.type] = data[workout.type]! + workout.duration;
         } else {
@@ -121,12 +156,24 @@ class StatsPage extends StatelessWidget {
     for (var workout in workouts) {
       final workoutDate = DateFormat('yyyy-MM-dd').format(workout.date);
       if (workoutDate == today) {
-        // Filter workouts for today
         if (data.containsKey(today)) {
           data[today] = data[today]! + workout.calories;
         } else {
           data[today] = workout.calories;
         }
+      }
+    }
+    return data;
+  }
+
+  Map<String, int> _aggregateCaloriesByType(List<Workout> workouts) {
+    final Map<String, int> data = {};
+
+    for (var workout in workouts) {
+      if (data.containsKey(workout.type)) {
+        data[workout.type] = data[workout.type]! + workout.calories;
+      } else {
+        data[workout.type] = workout.calories;
       }
     }
     return data;

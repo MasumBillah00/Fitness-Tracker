@@ -1,32 +1,51 @@
 import 'package:fitness_tracker_app/reposotiry/workoutrepository.dart';
-import 'package:fitness_tracker_app/view/home_screen.dart';
-import 'package:fitness_tracker_app/view/stats/total_workout_stats.dart';
+import 'package:fitness_tracker_app/view/login/login_screen.dart';
 import 'package:fitness_tracker_app/widget/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/login/login_bloc.dart';
 import 'bloc/workout_bloc.dart';
 import 'bloc/workout_event.dart';
+import 'database/login_database.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Insert the default user credentials before running the app
+  final dbHelper = LoginDatabaseHelper.instance;
+
+  // Check if the user already exists
+  final existingUser = await dbHelper.getUser('m.billahkst@gmail.com', '12345');
+
+  // Insert default user only if it doesn't exist
+  if (existingUser == null) {
+    await dbHelper.insertUser('m.billahkst@gmail.com', '12345');
+  }
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Fitness Tracker App',
-      theme: AppTheme.lightTheme,  // Use the defined theme
-      home: RepositoryProvider(
-        create: (context) => WorkoutRepository(),
-        child: BlocProvider(
-          create: (context) =>
-          WorkoutBloc(context.read<WorkoutRepository>())..add(LoadWorkouts()),
-          child: const HomeScreen(),
+    return RepositoryProvider(
+      create: (context) => WorkoutRepository(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => WorkoutBloc(context.read<WorkoutRepository>())
+              ..add(LoadWorkouts()),
+          ),
+          BlocProvider(
+            create: (context) => LoginBloc(LoginDatabaseHelper.instance),
+          ),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Fitness Tracker App',
+          theme: AppTheme.lightTheme,
+          home: LoginScreen(),
         ),
       ),
     );
