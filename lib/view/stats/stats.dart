@@ -14,26 +14,15 @@ class StatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Workout Stats'),
-      // ),
+
+     // appBar: AppBar(title: Text('Daile Stats'),),
       body: BlocBuilder<WorkoutBloc, WorkoutState>(
         builder: (context, state) {
           if (state is WorkoutsLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is WorkoutsLoaded) {
-            final workoutData = _aggregateWorkoutData(state.workouts);
-            final dailyCalories = _aggregateDailyCalories(state.workouts);
-            final caloriesByType = _aggregateCaloriesByType(state.workouts);
-
-            if (workoutData.isEmpty) {
-              return const Center(
-                child: Text(
-                  'No data available',
-                  style: TextStyle(fontSize: 18, color: Colors.black),
-                ),
-              );
-            }
+            final workoutData = _aggregateWorkoutData(state.workouts);  // Data for the first chart
+            final caloriesByTypeToday = _aggregateCaloriesByTypeToday(state.workouts);  // Data for the second chart
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -47,7 +36,14 @@ class StatsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  Expanded(
+                  workoutData.isEmpty
+                      ? const Center(
+                    child: Text(
+                      'No data available',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  )
+                      : Expanded(
                     child: BarChart(
                       BarChartData(
                         titlesData: FlTitlesData(
@@ -75,7 +71,14 @@ class StatsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  Expanded(
+                  caloriesByTypeToday.isEmpty
+                      ? const Center(
+                    child: Text(
+                      'No data available',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                  )
+                      : Expanded(
                     child: BarChart(
                       BarChartData(
                         titlesData: FlTitlesData(
@@ -83,30 +86,18 @@ class StatsPage extends StatelessWidget {
                             sideTitles: SideTitles(
                               showTitles: true,
                               getTitlesWidget: (value, meta) {
-                                return Text(caloriesByType.keys.elementAt(value.toInt()));
+                                return Text(caloriesByTypeToday.keys.elementAt(value.toInt()));
                               },
                             ),
                           ),
                         ),
                         borderData: FlBorderData(show: false),
-                        barGroups: _createBarGroups(caloriesByType),
+                        barGroups: _createBarGroups(caloriesByTypeToday),
                         gridData: const FlGridData(show: false),
                       ),
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  // const Text(
-                  //   'Calories Burn Progress',
-                  //   style: TextStyle(
-                  //     fontSize: 20.0,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 16.0),
-                  // Expanded(
-                  //   child: CaloriesProgressChart(dailyCalories: dailyCalories),
-                  // ),
-                  const SizedBox(height: 10,),
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
@@ -134,6 +125,7 @@ class StatsPage extends StatelessWidget {
     );
   }
 
+  // First chart data aggregation: Today's workout durations by type
   Map<String, int> _aggregateWorkoutData(List<Workout> workouts) {
     final Map<String, int> data = {};
     final currentDate = DateTime.now();
@@ -152,7 +144,8 @@ class StatsPage extends StatelessWidget {
     return data;
   }
 
-  Map<String, int> _aggregateDailyCalories(List<Workout> workouts) {
+  // Second chart data aggregation: Today's calories burned by workout type
+  Map<String, int> _aggregateCaloriesByTypeToday(List<Workout> workouts) {
     final Map<String, int> data = {};
     final currentDate = DateTime.now();
     final today = DateFormat('yyyy-MM-dd').format(currentDate);
@@ -160,29 +153,17 @@ class StatsPage extends StatelessWidget {
     for (var workout in workouts) {
       final workoutDate = DateFormat('yyyy-MM-dd').format(workout.date);
       if (workoutDate == today) {
-        if (data.containsKey(today)) {
-          data[today] = data[today]! + workout.calories;
+        if (data.containsKey(workout.type)) {
+          data[workout.type] = data[workout.type]! + workout.calories;
         } else {
-          data[today] = workout.calories;
+          data[workout.type] = workout.calories;
         }
       }
     }
     return data;
   }
 
-  Map<String, int> _aggregateCaloriesByType(List<Workout> workouts) {
-    final Map<String, int> data = {};
-
-    for (var workout in workouts) {
-      if (data.containsKey(workout.type)) {
-        data[workout.type] = data[workout.type]! + workout.calories;
-      } else {
-        data[workout.type] = workout.calories;
-      }
-    }
-    return data;
-  }
-
+  // Create bar groups for both charts
   List<BarChartGroupData> _createBarGroups(Map<String, int> data) {
     return data.entries.map((entry) {
       return BarChartGroupData(

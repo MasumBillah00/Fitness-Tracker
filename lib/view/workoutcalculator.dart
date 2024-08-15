@@ -1,3 +1,4 @@
+import 'package:fitness_tracker_app/view/stats/stats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -121,6 +122,36 @@ class _WorkoutCalculatorState extends State<WorkoutCalculator> {
               onPressed: _submitWorkout,
               child: const Text('Submit'),
             ),
+            const SizedBox(
+              height: 30,
+            ),
+
+            // Align(
+            //   alignment: Alignment.bottomRight,
+            //   child: TextButton(
+            //     onPressed: () {
+            //       Navigator.of(context).push(
+            //         MaterialPageRoute(
+            //           builder: (newContext) => BlocProvider.value(
+            //             value: BlocProvider.of<WorkoutBloc>(context),  // Use the existing instance
+            //             child: const StatsPage(),
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //     child: Text(
+            //       'See Stats',
+            //       style: TextStyle(
+            //         color: Colors.blueGrey.shade900,
+            //         fontSize: 16,
+            //         fontWeight: FontWeight.w600,
+            //         decoration: TextDecoration.underline,
+            //       ),
+            //     ),
+            //   )
+            //
+            // )
+
           ],
         ),
       ),

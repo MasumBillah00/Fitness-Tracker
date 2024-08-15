@@ -21,103 +21,71 @@ class WorkoutList extends StatelessWidget {
           } else if (state is WorkoutsLoaded) {
             return LayoutBuilder(
               builder: (context, constraints) {
-                // Allocate width proportionately or use flexible widgets
-                final width = constraints.maxWidth;
-                //final columnWidth = width / 15;
-                final dateWidth = width * .09;   // 15% for date
-                final typeWidth = width * 0.17;   // 25% for type
-                final durationWidth = width * 0.12; // 20% for duration
-                final caloriesWidth = width * 0.15; // 20% for calories
-                final actionWidth = width * 0.2;  // 20% for action
-
                 return SingleChildScrollView(
                   child: Column(
-
                     children: [
                       DataTable(
-                        columnSpacing: 20,
+                        columnSpacing: 22,
                         columns: [
                           DataColumn(
-                            label: SizedBox(
-                              width: dateWidth,
-                              child: const Text('Date', textAlign: TextAlign.center),
-                            ),
+                            label: const Text('Date', textAlign: TextAlign.center),
                           ),
                           DataColumn(
-                            label: SizedBox(
-                              width: typeWidth,
-                              child: const Text('Type', textAlign: TextAlign.center),
-                            ),
+                            label: const Text('Type', textAlign: TextAlign.center),
                           ),
                           DataColumn(
-                            label: SizedBox(
-                              width: durationWidth,
-                              child: const Text('Duration', textAlign: TextAlign.center),
-                            ),
+                            label: const Text('Duration', textAlign: TextAlign.center),
                           ),
                           DataColumn(
-                            label: SizedBox(
-                              width: caloriesWidth,
-                              child: const Text('Calories', textAlign: TextAlign.center),
-                            ),
+                            label: const Text('Calories', textAlign: TextAlign.center),
                           ),
                           DataColumn(
-                            label: SizedBox(
-                              width: actionWidth,
-                              child: const Text('Action', textAlign: TextAlign.center),
-                            ),
+                            label: const Text('Action', textAlign: TextAlign.center),
                           ),
                         ],
                         rows: state.workouts.map((workout) {
                           return DataRow(
                             cells: [
                               DataCell(
-                                SizedBox(
-                                  width: dateWidth,
-                                  child: Text(
-                                    DateFormat('MM-dd').format(workout.date),
-                                    textAlign: TextAlign.center,
-                                  ),
+                                Text(
+                                  DateFormat('MM-dd').format(workout.date),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               DataCell(
-                                SizedBox(
-                                  width: typeWidth,
-                                  child: Text(
-                                    workout.type,
-                                    textAlign: TextAlign.center,
-                                  ),
+                                Text(
+                                  workout.type,
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               DataCell(
-                                SizedBox(
-                                  width: durationWidth,
-                                  child: Text(
-                                    '${workout.duration} min',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                Text(
+                                  '${workout.duration} min',
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               DataCell(
-                                SizedBox(
-                                  width: caloriesWidth,
-                                  child: Text(
-                                    '${workout.calories}',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                Text(
+                                  '${workout.calories}',
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               DataCell(
-                                SizedBox(
-                                  width: actionWidth,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.red),
-                                    onPressed: () {
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () {
+                                    if (workout.id != null) {
                                       context
                                           .read<WorkoutBloc>()
                                           .add(DeleteWorkout(workout.id!));
-                                    },
-                                  ),
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text("Unable to delete workout."),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
                             ],

@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
             return Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/background.jpg'),
+                  image: AssetImage('assets/images/background1.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -264,15 +264,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                           foregroundColor: Colors.white,
-                         backgroundColor: Colors.blue,
+                        // style: ElevatedButton.styleFrom(
+                        //    foregroundColor: Colors.white,
+                        //  backgroundColor: Colors.blue,
                         //   padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 10),
                         //   shape: RoundedRectangleBorder(
                         //     borderRadius: BorderRadius.circular(10),
                         //   ),
                         //   elevation: 5,
-                        ),
+                        // ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _loginBloc.add(LoginSubmitted());
