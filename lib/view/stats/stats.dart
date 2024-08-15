@@ -6,7 +6,6 @@ import '../../bloc/workout_bloc.dart';
 import '../../bloc/workout_state.dart';
 import '../../model/workout_model.dart';
 import 'package:intl/intl.dart';
-import '../calories_progress.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});

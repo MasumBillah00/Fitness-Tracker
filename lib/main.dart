@@ -27,6 +27,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Fitness Tracker App',
           theme: AppTheme.lightTheme,
-          home: LoginScreen(),
+          home:const LoginScreen(),
         ),
       ),
     );

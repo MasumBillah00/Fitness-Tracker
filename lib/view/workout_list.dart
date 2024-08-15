@@ -26,21 +26,21 @@ class WorkoutList extends StatelessWidget {
                     children: [
                       DataTable(
                         columnSpacing: 22,
-                        columns: [
+                        columns: const [
                           DataColumn(
-                            label: const Text('Date', textAlign: TextAlign.center),
+                            label: Text('Date', textAlign: TextAlign.center),
                           ),
                           DataColumn(
-                            label: const Text('Type', textAlign: TextAlign.center),
+                            label: Text('Type', textAlign: TextAlign.center),
                           ),
                           DataColumn(
-                            label: const Text('Duration', textAlign: TextAlign.center),
+                            label: Text('Duration', textAlign: TextAlign.center),
                           ),
                           DataColumn(
-                            label: const Text('Calories', textAlign: TextAlign.center),
+                            label: Text('Calories', textAlign: TextAlign.center),
                           ),
                           DataColumn(
-                            label: const Text('Action', textAlign: TextAlign.center),
+                            label: Text('Action', textAlign: TextAlign.center),
                           ),
                         ],
                         rows: state.workouts.map((workout) {

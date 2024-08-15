@@ -1,6 +1,5 @@
 import 'package:fitness_tracker_app/view/settings.dart';
 import 'package:fitness_tracker_app/view/stats/stats.dart';
-import 'package:fitness_tracker_app/view/stats/total_workout_stats.dart';
 import 'package:fitness_tracker_app/view/workoutcalculator.dart';
 import 'package:fitness_tracker_app/widget/drawer_widget.dart';
 import 'package:flutter/material.dart';

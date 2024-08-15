@@ -6,11 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/login/login_bloc.dart';
 import '../../../bloc/login/login_event.dart';
 import '../../../bloc/login/login_state.dart';
-import '../../database/login_database.dart';
 
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -93,17 +92,17 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Auto-fill Password?'),
+          title: const Text('Auto-fill Password?'),
           content: Text('Do you want to fill in the saved password for ${emailController.text}?'),
           actions: <Widget>[
             TextButton(
-              child: Text('No'),
+              child: const Text('No'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Yes'),
+              child: const Text('Yes'),
               onPressed: () {
                 if (_savedPassword != null) {
                   passwordController.text = _savedPassword!;
@@ -184,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintStyle: TextStyle(color: Colors.blueGrey.shade900),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 2.0),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 3.0),
@@ -214,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintStyle:  TextStyle(color: Colors.blueGrey.shade900),
                           enabledBorder:  OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 2.0),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedBorder:  OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 3.0),

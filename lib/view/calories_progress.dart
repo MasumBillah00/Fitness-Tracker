@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
-class CaloriesProgressChart extends StatelessWidget {
-  final Map<String, int> dailyCalories;
+import '../model/workout_model.dart';
 
-  const CaloriesProgressChart({super.key, required this.dailyCalories});
+class CaloriesProgressChart extends StatelessWidget {
+  final List<Workout> workouts;
+
+  const CaloriesProgressChart({super.key, required this.workouts});
 
   @override
   Widget build(BuildContext context) {
+    final dailyCalories = _aggregateCaloriesByDate(workouts);
+
     if (dailyCalories.isEmpty) {
       return const Center(
         child: Text(
@@ -91,4 +95,28 @@ class CaloriesProgressChart extends StatelessWidget {
       ),
     );
   }
+
+  // Function to aggregate calories burned by date
+  Map<String, int> _aggregateCaloriesByDate(List<Workout> workouts) {
+    final Map<String, int> dailyCalories = {};
+
+    for (var workout in workouts) {
+      final workoutDate = DateFormat('yyyy-MM-dd').format(workout.date);
+      if (dailyCalories.containsKey(workoutDate)) {
+        dailyCalories[workoutDate] = dailyCalories[workoutDate]! + workout.calories;
+      } else {
+        dailyCalories[workoutDate] = workout.calories;
+      }
+    }
+
+    return dailyCalories;
+  }
 }
+
+// // Mock Workout model (replace this with your actual model)
+// class Workout {
+//   final DateTime date;
+//   final int calories;
+//
+//   Workout(this.date, this.calories);
+// }

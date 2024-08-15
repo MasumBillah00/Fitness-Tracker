@@ -1,13 +1,10 @@
-import 'package:fitness_tracker_app/view/stats/stats.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/workout_bloc.dart';
 import '../../bloc/workout_state.dart';
 import '../../model/workout_model.dart';
-import 'package:intl/intl.dart';
 
-import '../calories_progress.dart';
 
 class TotalWorkoutStats extends StatelessWidget {
   const TotalWorkoutStats({super.key});
