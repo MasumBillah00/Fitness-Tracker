@@ -73,7 +73,7 @@ class Fitness_Drawer extends StatelessWidget {
                 Card(
                   color: Colors.black26,
                   child: ListTile(
-                    leading:  Icon(Icons.query_stats,color: Colors.blueGrey[900],),
+                    leading:  Icon(Icons.bar_chart_outlined,color: Colors.blueGrey[900],),
                     title: const Text(
                       'Stats',
                       style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
@@ -88,10 +88,10 @@ class Fitness_Drawer extends StatelessWidget {
                 Card(
                   color: Colors.black26,
                   child: ListTile(
-                    leading:  Icon(Icons.settings,
+                    leading:  Icon(Icons.query_stats,
                       color: Colors.blueGrey[900],),
                     title: const Text(
-                      'Setting',
+                      'Progress',
                       style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                     ),
                     onTap: () {

@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const WorkoutList(),
     const StatsPage(),
     //const TotalWorkoutStats(),
-    const SettingsPage(),
+    const ProgressChart(),
     // Assuming WorkoutList is a page to display workout details
   ];
 
@@ -71,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Stats',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Setting',
+              icon: Icon(Icons.query_stats),
+              label: 'Progress',
             ),
       
           ],
