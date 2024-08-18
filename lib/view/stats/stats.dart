@@ -13,8 +13,6 @@ class StatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-     // appBar: AppBar(title: Text('Daile Stats'),),
       body: BlocBuilder<WorkoutBloc, WorkoutState>(
         builder: (context, state) {
           if (state is WorkoutsLoading) {
@@ -54,10 +52,14 @@ class StatsPage extends StatelessWidget {
                               },
                             ),
                           ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
                         ),
-                        borderData: FlBorderData(show: false),
+                        borderData: FlBorderData(show: true),
+                        gridData: const FlGridData(show: true),
+                        maxY: _calculateMaxY(workoutData),  // Calculate maxY
                         barGroups: _createBarGroups(workoutData),
-                        gridData: const FlGridData(show: false),
                       ),
                     ),
                   ),
@@ -89,28 +91,37 @@ class StatsPage extends StatelessWidget {
                               },
                             ),
                           ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
                         ),
-                        borderData: FlBorderData(show: false),
+                        borderData: FlBorderData(show: true),
+                        gridData: const FlGridData(show: true),
+                        maxY: _calculateMaxY(caloriesByTypeToday),  // Calculate maxY
                         barGroups: _createBarGroups(caloriesByTypeToday),
-                        gridData: const FlGridData(show: false),
                       ),
                     ),
                   ),
                   const SizedBox(height: 16.0),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (newContext) => BlocProvider.value(
-                              value: BlocProvider.of<WorkoutBloc>(context),
-                              child: const TotalWorkoutStats(),
+                    child: Card(
+                      elevation: 5,
+                      color: Colors.blue,
+                      shadowColor: Colors.blue,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (newContext) => BlocProvider.value(
+                                value: BlocProvider.of<WorkoutBloc>(context),
+                                child: const TotalWorkoutStats(),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: const Text('Total Workout Stats'),
+                          );
+                        },
+                        child: const Text('Total Workout Stats'),
+                      ),
                     ),
                   ),
                 ],
@@ -176,5 +187,13 @@ class StatsPage extends StatelessWidget {
         ],
       );
     }).toList();
+  }
+
+  // Calculate maxY with a 10% buffer
+  double _calculateMaxY(Map<String, int> workoutData) {
+    final maxValue = workoutData.values.isNotEmpty
+        ? workoutData.values.reduce((a, b) => a > b ? a : b)
+        : 0;
+    return maxValue + (maxValue * 0.1);  // Add a 10% buffer
   }
 }

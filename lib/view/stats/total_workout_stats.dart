@@ -49,6 +49,12 @@ class TotalWorkoutStats extends StatelessWidget {
                                 },
                               ),
                             ),
+                            rightTitles:const AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: false,
+
+                              ),
+                            ),
                           ),
                           borderData: FlBorderData(show: true),
                           barGroups: _createBarGroups(caloriesData),
@@ -192,7 +198,7 @@ class TotalWorkoutStats extends StatelessWidget {
       Colors.redAccent.shade700,
       Colors.purple.shade700,
       Colors.greenAccent.shade700,
-      Colors.blueAccent.shade700,
+      Colors.blue.shade900,
     ];
 
     final total = data.values.fold(0, (sum, value) => sum + value);
@@ -201,12 +207,12 @@ class TotalWorkoutStats extends StatelessWidget {
       final index = entry.key;
       final item = entry.value;
       final color = colors[index % colors.length];
-      final percentage = (item.value / total * 100).toStringAsFixed(1);
+      final percentage = (item.value / total * 100).toStringAsFixed(0);
       final double percentageValue = item.value / total * 100;
 
       return PieChartSectionData(
         value: item.value.toDouble(),
-        title: percentageValue >= 5 ? '$percentage%' : '', // Show only if >= 5%
+        title: percentageValue >= 10 ? '$percentage%' : '',
         color: color,
         radius: 90,
         titleStyle: const TextStyle(
@@ -224,7 +230,7 @@ class TotalWorkoutStats extends StatelessWidget {
       Colors.redAccent.shade700,
       Colors.purple.shade700,
       Colors.greenAccent.shade700,
-      Colors.blueAccent.shade700,
+      Colors.blue.shade900,
     ];
 
     return data.entries.toList().asMap().entries.map((entry) {
