@@ -33,10 +33,10 @@ class TotalWorkoutStats extends StatelessWidget {
               }
 
               return Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(bottom: 12,left: 8,right: 16,top: 12),
                 child: Column(
                   children: [
-                    const SizedBox(height: 16.0),
+                    const SizedBox(height: 15.0),
                     Expanded(
                       child: BarChart(
                         BarChartData(
@@ -69,18 +69,18 @@ class TotalWorkoutStats extends StatelessWidget {
                       child: Row(
                         children: [
                           SizedBox(
-                            width: 250,
-                            height: 250,
+                            width: 300,
+                            height: 300,
                             child: PieChart(
                               PieChartData(
                                 sections: _createPieSections(caloriesData),
                                 borderData: FlBorderData(show: false),
                                 sectionsSpace: 5,
-                                centerSpaceRadius: 0,
+                                centerSpaceRadius: 5,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 16.0),
+                        //  const SizedBox(width: 20.0),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +91,7 @@ class TotalWorkoutStats extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16.0),
+                    const SizedBox(height: 8.0),
                   ],
                 ),
               );
@@ -191,8 +191,8 @@ class TotalWorkoutStats extends StatelessWidget {
     final colors = [
       Colors.redAccent.shade700,
       Colors.purple.shade700,
-      Colors.tealAccent.shade700,
-      Colors.orangeAccent.shade700,
+      Colors.greenAccent.shade700,
+      Colors.blueAccent.shade700,
     ];
 
     final total = data.values.fold(0, (sum, value) => sum + value);
@@ -223,8 +223,8 @@ class TotalWorkoutStats extends StatelessWidget {
     final colors = [
       Colors.redAccent.shade700,
       Colors.purple.shade700,
-      Colors.tealAccent.shade700,
-      Colors.orangeAccent.shade700,
+      Colors.greenAccent.shade700,
+      Colors.blueAccent.shade700,
     ];
 
     return data.entries.toList().asMap().entries.map((entry) {

@@ -1,8 +1,8 @@
-import 'package:fitness_tracker_app/view/settings.dart';
 import 'package:fitness_tracker_app/view/stats/stats.dart';
 import 'package:fitness_tracker_app/view/workoutcalculator.dart';
 import 'package:fitness_tracker_app/widget/drawer_widget.dart';
 import 'package:flutter/material.dart';
+import 'calories_progress.dart';
 import 'workout_list.dart';
 
 
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       
             BottomNavigationBarItem(
-              icon: Icon(Icons.list),
+              icon: Icon(Icons.library_books),
               label: 'Workouts',
             ),
             BottomNavigationBarItem(
