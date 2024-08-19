@@ -70,6 +70,7 @@ class ProgressChart extends StatelessWidget {
                           right: 16.0,
                           left: 12,
                           top: 12,
+                          bottom: 8
                         ),
                         child: LineChart(
                           LineChartData(
@@ -95,17 +96,18 @@ class ProgressChart extends StatelessWidget {
                               topTitles: const AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
+
                               bottomTitles: AxisTitles(
                                 sideTitles: SideTitles(
                                   showTitles: true,
-                                  reservedSize: 40,
+                                  reservedSize: 30,
                                   getTitlesWidget: (value, meta) {
                                     final dateIndex = value.toInt();
                                     if (dateIndex >= 0 &&
                                         dateIndex < sortedEntries.length) {
                                       final dateKey = sortedEntries[dateIndex].key;
                                       return Text(
-                                        DateFormat('MM-dd').format(
+                                        DateFormat('dd').format(
                                             DateFormat('yyyy-MM-dd')
                                                 .parse(dateKey)),
                                         style: const TextStyle(
@@ -123,14 +125,14 @@ class ProgressChart extends StatelessWidget {
                             ),
                             borderData: FlBorderData(
                               show: true,
-                              border: const Border(
+                              border:  Border(
                                 left: BorderSide(
-                                  color:  Color(0xff37434d),
-                                  width: 2,
+                                  color:  Colors.greenAccent.shade700,
+                                  width: 3,
                                 ),
                                 bottom: BorderSide(
-                                  color:  Color(0xff37434d),
-                                  width: 2,
+                                  color:  Colors.greenAccent.shade700,
+                                  width: 3,
                                 ),
                                 top: BorderSide.none, // Remove top border
                                 right: BorderSide.none, // Remove right border
