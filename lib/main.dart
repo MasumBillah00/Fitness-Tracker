@@ -24,7 +24,7 @@ void main() async {
     await dbHelper.insertUser('m.billahkst@gmail.com', '12345');
   }
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

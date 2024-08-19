@@ -38,6 +38,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _onLogout(Logout event, Emitter<LoginState> emit) {
-    emit(LoginState());
+    emit(const LoginState());
   }
 }

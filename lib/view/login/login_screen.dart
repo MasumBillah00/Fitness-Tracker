@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
   late LoginBloc _loginBloc;
-  bool _rememberMe = false;
+  //bool _rememberMe = false;
   String? _savedPassword;
   bool _showPasswordDialog = true;
   bool _isPasswordVisible = false;

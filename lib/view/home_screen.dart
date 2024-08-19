@@ -56,22 +56,69 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: Fitness_Drawer(onItemTapped: _onItemTapped),
         body: _pages[_selectedIndex], // Display the selected page
         bottomNavigationBar: BottomNavigationBar(
-          items: const [
+          items:  [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home,
+                      size: 30,
+                      color: Colors.greenAccent.shade400,        // Icon color
+                      semanticLabel: 'Stats', // Accessible label for screen readers
+                      textDirection: TextDirection.ltr,  // Text direction for the icon
+                      shadows: const [
+                        Shadow(
+                          offset: Offset(3.0, 3.0), // Shadow position
+                          blurRadius: 3.0,          // Shadow blur radius
+                          color: Colors.black45,     // Shadow color
+                        ),
+                      ],
+                    ),
+
               label: 'Home',
             ),
       
             BottomNavigationBarItem(
-              icon: Icon(Icons.library_books),
+
+              icon: Icon(Icons.library_books,size: 30,
+                color: Colors.greenAccent.shade400,        // Icon color
+                semanticLabel: 'Stats', // Accessible label for screen readers
+                textDirection: TextDirection.ltr,  // Text direction for the icon
+                shadows: const [
+                  Shadow(
+                    offset: Offset(3.0, 3.0), // Shadow position
+                    blurRadius: 3.0,          // Shadow blur radius
+                    color: Colors.black45,     // Shadow color
+                  ),
+                ],
+              ),
               label: 'Workouts',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart),
+              icon: Icon(Icons.bar_chart,size: 30,
+                color: Colors.greenAccent.shade400,        // Icon color
+                semanticLabel: 'Stats', // Accessible label for screen readers
+                textDirection: TextDirection.ltr,  // Text direction for the icon
+                shadows: const [
+                  Shadow(
+                    offset: Offset(3.0, 3.0), // Shadow position
+                    blurRadius: 3.0,          // Shadow blur radius
+                    color: Colors.black45,     // Shadow color
+                  ),
+                ],
+              ),
               label: 'Stats',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.query_stats),
+              icon: Icon(Icons.query_stats,size: 30,
+                color: Colors.greenAccent.shade400,        // Icon color
+                semanticLabel: 'Stats', // Accessible label for screen readers
+                textDirection: TextDirection.ltr,  // Text direction for the icon
+                shadows: const [
+                  Shadow(
+                    offset: Offset(3.0, 3.0), // Shadow position
+                    blurRadius: 3.0,          // Shadow blur radius
+                    color: Colors.black45,     // Shadow color
+                  ),
+                ],
+              ),
               label: 'Progress',
             ),
       

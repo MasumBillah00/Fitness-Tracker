@@ -137,7 +137,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         )
                             : const Text('Register'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Align(

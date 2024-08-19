@@ -51,17 +51,24 @@ class Fitness_Drawer extends StatelessWidget {
                   Card(
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
-                      leading:  Icon(Icons.home,
-                        color: Colors.greenAccent.shade400,        // Icon color
-                        semanticLabel: 'Home', // Accessible label for screen readers
-                        textDirection: TextDirection.ltr,  // Text direction for the icon
-                        shadows: const [
-                          Shadow(
-                            offset: Offset(3.0, 3.0), // Shadow position
-                            blurRadius: 3.0,          // Shadow blur radius
-                            color: Colors.black45,     // Shadow color
+                      leading: Container(
+                        width: 30, // Set the width and height to control the image size
+                        height: 30,
+
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/icons/house.png'), // Path to your image
+                            fit: BoxFit.contain, // Adjust the image to fit within the container
                           ),
-                        ],),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black45,  // Shadow color
+                          //     blurRadius: 3.0,        // Shadow blur radius
+                          //     offset: Offset(3.0, 3.0), // Shadow offset
+                          //   ),
+                          // ],
+                        ),
+                      ),
                       title: const Text(
                         'Home',
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
@@ -75,18 +82,23 @@ class Fitness_Drawer extends StatelessWidget {
                   Card(
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
-                      leading: Icon(
-                        Icons.library_books,
-                        color: Colors.greenAccent.shade400,        // Icon color
-                        semanticLabel: 'Bar Chart', // Accessible label for screen readers
-                        textDirection: TextDirection.ltr,  // Text direction for the icon
-                        shadows: const [
-                          Shadow(
-                            offset: Offset(3.0, 3.0), // Shadow position
-                            blurRadius: 3.0,          // Shadow blur radius
-                            color: Colors.black45,     // Shadow color
+                      leading: Container(
+                        width: 30, // Set the width and height to control the image size
+                        height: 30,
+
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/icons/documents.png'), // Path to your image
+                            fit: BoxFit.contain, // Adjust the image to fit within the container
                           ),
-                        ],
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black45,  // Shadow color
+                          //     blurRadius: 3.0,        // Shadow blur radius
+                          //     offset: Offset(3.0, 3.0), // Shadow offset
+                          //   ),
+                          // ],
+                        ),
                       ),
                       title: const Text(
                         'Workout List',
@@ -101,21 +113,24 @@ class Fitness_Drawer extends StatelessWidget {
                   Card(
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
-                      leading: Icon(
-                        Icons.bar_chart_outlined,  // Icon data
-                        size: 30.0,                // Icon size in logical pixels
-                        color: Colors.greenAccent.shade400,        // Icon color
-                        semanticLabel: 'Stats', // Accessible label for screen readers
-                        textDirection: TextDirection.ltr,  // Text direction for the icon
-                        shadows: const [
-                          Shadow(
-                            offset: Offset(3.0, 3.0), // Shadow position
-                            blurRadius: 3.0,          // Shadow blur radius
-                            color: Colors.black45,     // Shadow color
-                          ),
-                        ],
-                      ),
+                      leading: Container(
+                        width: 30, // Set the width and height to control the image size
+                        height: 30,
 
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/icons/stats.png'), // Path to your image
+                            fit: BoxFit.contain, // Adjust the image to fit within the container
+                          ),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black45,  // Shadow color
+                          //     blurRadius: 3.0,        // Shadow blur radius
+                          //     offset: Offset(3.0, 3.0), // Shadow offset
+                          //   ),
+                          // ],
+                        ),
+                      ),
                       title: const Text(
                         'Stats',
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
@@ -127,20 +142,56 @@ class Fitness_Drawer extends StatelessWidget {
                     ),
                   ),
 
+                  // Card(
+                  //   color: Colors.blueGrey.shade800,
+                  //   child: ListTile(
+                  //     leading: Icon(
+                  //       Icons.bar_chart_outlined,  // Icon data
+                  //       size: 30.0,                // Icon size in logical pixels
+                  //       color: Colors.greenAccent.shade400,        // Icon color
+                  //       semanticLabel: 'Stats', // Accessible label for screen readers
+                  //       textDirection: TextDirection.ltr,  // Text direction for the icon
+                  //       shadows: const [
+                  //         Shadow(
+                  //           offset: Offset(3.0, 3.0), // Shadow position
+                  //           blurRadius: 3.0,          // Shadow blur radius
+                  //           color: Colors.black45,     // Shadow color
+                  //         ),
+                  //       ],
+                  //     ),
+
+                  //     title: const Text(
+                  //       'Stats',
+                  //       style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
+                  //     ),
+                  //     onTap: () {
+                  //       onItemTapped(2);
+                  //       Navigator.of(context).pop(); // Close the drawer
+                  //     },
+                  //   ),
+                  // ),
+
                   Card(
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
-                      leading:  Icon(Icons.query_stats,
-                        color: Colors.greenAccent.shade400,        // Icon color
-                        semanticLabel: 'Progress', // Accessible label for screen readers
-                        textDirection: TextDirection.ltr,  // Text direction for the icon
-                        shadows: const [
-                          Shadow(
-                            offset: Offset(3.0, 3.0), // Shadow position
-                            blurRadius: 3.0,          // Shadow blur radius
-                            color: Colors.black45,     // Shadow color
+                      leading: Container(
+                        width: 30, // Set the width and height to control the image size
+                        height: 30,
+
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/icons/progress.png'), // Path to your image
+                            fit: BoxFit.contain, // Adjust the image to fit within the container
                           ),
-                        ],),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black45,  // Shadow color
+                          //     blurRadius: 3.0,        // Shadow blur radius
+                          //     offset: Offset(3.0, 3.0), // Shadow offset
+                          //   ),
+                          // ],
+                        ),
+                      ),
                       title: const Text(
                         'Progress',
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500,
@@ -159,16 +210,24 @@ class Fitness_Drawer extends StatelessWidget {
                   Card(
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
-                      leading:  Icon(Icons.logout, color: Colors.greenAccent.shade400,        // Icon color
-                        semanticLabel: 'Log Out', // Accessible label for screen readers
-                        textDirection: TextDirection.ltr,  // Text direction for the icon
-                        shadows: const [
-                          Shadow(
-                            offset: Offset(3.0, 3.0), // Shadow position
-                            blurRadius: 3.0,          // Shadow blur radius
-                            color: Colors.black45,     // Shadow color
+                      leading: Container(
+                        width: 30, // Set the width and height to control the image size
+                        height: 30,
+
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/icons/logout.png'), // Path to your image
+                            fit: BoxFit.contain, // Adjust the image to fit within the container
                           ),
-                        ],),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black45,  // Shadow color
+                          //     blurRadius: 3.0,        // Shadow blur radius
+                          //     offset: Offset(3.0, 3.0), // Shadow offset
+                          //   ),
+                          // ],
+                        ),
+                      ),
                       title: const Text(
                         'Logout',
                         style: TextStyle(
