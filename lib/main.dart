@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/login/login_bloc.dart';
+import 'bloc/registration/registration_bloc.dart';
 import 'bloc/workout_bloc.dart';
 import 'bloc/workout_event.dart';
 import 'database/login_database.dart';
@@ -35,6 +36,11 @@ class MyApp extends StatelessWidget {
       create: (context) => WorkoutRepository(),
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<RegistrationBloc>(
+            create: (context) => RegistrationBloc(
+              databaseHelper: LoginDatabaseHelper.instance, // Provide the correct dependency
+            ),
+          ),
           BlocProvider(
             create: (context) => WorkoutBloc(context.read<WorkoutRepository>())
               ..add(LoadWorkouts()),

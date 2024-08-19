@@ -1,6 +1,34 @@
-part of 'registration_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-sealed class RegistrationState {}
+enum RegistrationStatus { initial, success, error, loading }
 
-final class RegistrationInitial extends RegistrationState {}
+class RegistrationState extends Equatable {
+  final String email;
+  final String password;
+  final String message;
+  final RegistrationStatus status;
+
+  const RegistrationState({
+    this.email = '',
+    this.password = '',
+    this.message = '',
+    this.status = RegistrationStatus.initial,
+  });
+
+  RegistrationState copyWith({
+    String? email,
+    String? password,
+    String? message,
+    RegistrationStatus? status,
+  }) {
+    return RegistrationState(
+      email: email ?? this.email,
+      password: password ?? this.password,
+      message: message ?? this.message,
+      status: status ?? this.status,
+    );
+  }
+
+  @override
+  List<Object> get props => [email, password, message, status];
+}

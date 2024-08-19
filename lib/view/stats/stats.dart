@@ -173,21 +173,56 @@ class StatsPage extends StatelessWidget {
     return data;
   }
 
-  // Create bar groups for both charts
   List<BarChartGroupData> _createBarGroups(Map<String, int> data) {
-    return data.entries.map((entry) {
+    final List<Color> barColors = [
+      Colors.redAccent.shade700,
+      Colors.purple.shade700,
+      Colors.greenAccent.shade700,
+      Colors.blue.shade900,
+    ];
+
+    // Convert entries to list and use asMap to get index along with entry
+    return data.entries.toList().asMap().entries.map((entry) {
+      final index = entry.key; // Get the index
+      final mapEntry = entry.value; // Get the actual map entry
+
       return BarChartGroupData(
-        x: data.keys.toList().indexOf(entry.key),
+        x: index,
         barRods: [
           BarChartRodData(
-            toY: entry.value.toDouble(),
-            color: Colors.blueGrey.shade700,
-            width: 16,
+            toY: mapEntry.value.toDouble(),
+            color: barColors[index % barColors.length], // Assign color based on index
+            width: 20,
           ),
         ],
       );
     }).toList();
   }
+
+
+  // Create bar groups for both charts
+  // List<BarChartGroupData> _createBarGroups(Map<String, int> data) {
+  //
+  //   final List<Color> barColors = [
+  //     Colors.redAccent.shade700,
+  //     Colors.purple.shade700,
+  //     Colors.greenAccent.shade700,
+  //     Colors.blue.shade900,
+  //   ];
+  //   return data.entries.map((entry) {
+  //     return BarChartGroupData(
+  //
+  //       x: data.keys.toList().indexOf(entry.key),
+  //       barRods: [
+  //         BarChartRodData(
+  //           toY: entry.value.toDouble(),
+  //           color: barColors[index % barColors.length],
+  //           width: 16,
+  //         ),
+  //       ],
+  //     );
+  //   }).toList();
+  // }
 
   // Calculate maxY with a 10% buffer
   double _calculateMaxY(Map<String, int> workoutData) {

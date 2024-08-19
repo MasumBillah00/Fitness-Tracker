@@ -58,6 +58,7 @@ class TotalWorkoutStats extends StatelessWidget {
                           ),
                           borderData: FlBorderData(show: true),
                           barGroups: _createBarGroups(caloriesData),
+                          maxY: _calculateMaxY(caloriesData),
                           gridData: const FlGridData(show: true),
                         ),
                       ),
@@ -75,8 +76,8 @@ class TotalWorkoutStats extends StatelessWidget {
                       child: Row(
                         children: [
                           SizedBox(
-                            width: 300,
-                            height: 300,
+                            width: 250,
+                            height: 250,
                             child: PieChart(
                               PieChartData(
                                 sections: _createPieSections(caloriesData),
@@ -86,7 +87,7 @@ class TotalWorkoutStats extends StatelessWidget {
                               ),
                             ),
                           ),
-                        //  const SizedBox(width: 20.0),
+                          const SizedBox(width: 20.0),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -124,74 +125,52 @@ class TotalWorkoutStats extends StatelessWidget {
   }
 
   List<BarChartGroupData> _createBarGroups(Map<String, int> data) {
+    // Define a list of colors to use for each bar
+    final List<Color> barColors = [
+      Colors.redAccent.shade700,
+      Colors.purple.shade700,
+      Colors.greenAccent.shade700,
+      Colors.blue.shade900,
+    ];
+
+    // Map data to BarChartGroupData, assigning colors based on index
     return data.entries.map((entry) {
+      final index = data.keys.toList().indexOf(entry.key);
       return BarChartGroupData(
-        x: data.keys.toList().indexOf(entry.key),
+        x: index,
         barRods: [
           BarChartRodData(
             toY: entry.value.toDouble(),
-            color: Colors.blueGrey.shade700,
-            width: 16,
+            color: barColors[index % barColors.length], // Assign color based on index
+            width: 20,
           ),
         ],
       );
     }).toList();
   }
+  double _calculateMaxY(Map<String, int> workoutData) {
+    final maxValue = workoutData.values.isNotEmpty
+        ? workoutData.values.reduce((a, b) => a > b ? a : b)
+        : 0;
+    return maxValue + (maxValue * 0.1);  // Add a 10% buffer
+  }
 
-  // List<PieChartSectionData> _createPieSections(Map<String, int> data) {
-  //   final colors = [
-  //     Colors.redAccent.shade700,
-  //     Colors.purple.shade700,
-  //     Colors.tealAccent.shade700,
-  //     Colors.orangeAccent.shade700,
-  //
-  //
-  //
-  //   ];
-  //
-  //   return data.entries.toList().asMap().entries.map((entry) {
-  //     final index = entry.key;
-  //     final item = entry.value;
-  //     final color = colors[index % colors.length];
-  //
-  //     return PieChartSectionData(
-  //       value: item.value.toDouble(),
-  //       title: '',
-  //       color: color,
-  //       radius: 90,
-  //
+  // List<BarChartGroupData> _createBarGroups(Map<String, int> data) {
+  //   return data.entries.map((entry) {
+  //     return BarChartGroupData(
+  //       x: data.keys.toList().indexOf(entry.key),
+  //       barRods: [
+  //         BarChartRodData(
+  //           toY: entry.value.toDouble(),
+  //           color: Colors.blueGrey.shade700,
+  //           width: 16,
+  //         ),
+  //       ],
   //     );
   //   }).toList();
   // }
 
-  // List<PieChartSectionData> _createPieSections(Map<String, int> data) {
-  //   final colors = [
-  //     Colors.redAccent.shade700,
-  //     Colors.purple.shade700,
-  //     Colors.tealAccent.shade700,
-  //     Colors.orangeAccent.shade700,
-  //   ];
-  //
-  //   final total = data.values.fold(0, (sum, value) => sum + value);
-  //
-  //   return data.entries.toList().asMap().entries.map((entry) {
-  //     final index = entry.key;
-  //     final item = entry.value;
-  //     final color = colors[index % colors.length];
-  //     final percentage = (item.value / total * 100).toStringAsFixed(1); // Calculate percentage
-  //
-  //     return PieChartSectionData(
-  //       value: item.value.toDouble(),
-  //       title: '$percentage%', // Display percentage in the middle of the pie element
-  //       color: color,
-  //       radius: 90,
-  //       titleStyle: const TextStyle(
-  //         fontSize: 16,
-  //         color: Colors.white, // Make sure the text is readable on the pie element
-  //       ),
-  //     );
-  //   }).toList();
-  // }
+
 
   List<PieChartSectionData> _createPieSections(Map<String, int> data) {
     final colors = [
@@ -214,7 +193,7 @@ class TotalWorkoutStats extends StatelessWidget {
         value: item.value.toDouble(),
         title: percentageValue >= 10 ? '$percentage%' : '',
         color: color,
-        radius: 90,
+        radius: 100,
         titleStyle: const TextStyle(
           fontSize: 16,
           color: Colors.white, // Make sure the text is readable on the pie element
