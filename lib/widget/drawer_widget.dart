@@ -18,7 +18,7 @@ class Fitness_Drawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
-      child: Container(
+      child: SizedBox(
         width: screenWidth * 0.6,
         child: Drawer(
           child: SizedBox(
@@ -35,7 +35,7 @@ class Fitness_Drawer extends StatelessWidget {
                 ),
                 children: <Widget>[
                   SizedBox(
-                    height: 80,
+                    height: 90,
                     child: DrawerHeader(
                       decoration: BoxDecoration(color: Colors.blueGrey[900], borderRadius: BorderRadius.circular(13)),
                       child: const Text(
@@ -43,6 +43,7 @@ class Fitness_Drawer extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 28,
+                          fontWeight: FontWeight.w500
                         ),
                       ),
                     ),
@@ -50,7 +51,17 @@ class Fitness_Drawer extends StatelessWidget {
                   Card(
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
-                      leading: const Icon(Icons.home, color: Colors.white),
+                      leading:  Icon(Icons.home,
+                        color: Colors.greenAccent.shade400,        // Icon color
+                        semanticLabel: 'Home', // Accessible label for screen readers
+                        textDirection: TextDirection.ltr,  // Text direction for the icon
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(3.0, 3.0), // Shadow position
+                            blurRadius: 3.0,          // Shadow blur radius
+                            color: Colors.black45,     // Shadow color
+                          ),
+                        ],),
                       title: const Text(
                         'Home',
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
@@ -66,7 +77,16 @@ class Fitness_Drawer extends StatelessWidget {
                     child: ListTile(
                       leading: Icon(
                         Icons.library_books,
-                          color: Colors.white
+                        color: Colors.greenAccent.shade400,        // Icon color
+                        semanticLabel: 'Bar Chart', // Accessible label for screen readers
+                        textDirection: TextDirection.ltr,  // Text direction for the icon
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(3.0, 3.0), // Shadow position
+                            blurRadius: 3.0,          // Shadow blur radius
+                            color: Colors.black45,     // Shadow color
+                          ),
+                        ],
                       ),
                       title: const Text(
                         'Workout List',
@@ -81,7 +101,21 @@ class Fitness_Drawer extends StatelessWidget {
                   Card(
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
-                      leading:  Icon(Icons.bar_chart_outlined, color: Colors.white),
+                      leading: Icon(
+                        Icons.bar_chart_outlined,  // Icon data
+                        size: 30.0,                // Icon size in logical pixels
+                        color: Colors.greenAccent.shade400,        // Icon color
+                        semanticLabel: 'Stats', // Accessible label for screen readers
+                        textDirection: TextDirection.ltr,  // Text direction for the icon
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(3.0, 3.0), // Shadow position
+                            blurRadius: 3.0,          // Shadow blur radius
+                            color: Colors.black45,     // Shadow color
+                          ),
+                        ],
+                      ),
+
                       title: const Text(
                         'Stats',
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
@@ -97,7 +131,16 @@ class Fitness_Drawer extends StatelessWidget {
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
                       leading:  Icon(Icons.query_stats,
-                          color: Colors.white),
+                        color: Colors.greenAccent.shade400,        // Icon color
+                        semanticLabel: 'Progress', // Accessible label for screen readers
+                        textDirection: TextDirection.ltr,  // Text direction for the icon
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(3.0, 3.0), // Shadow position
+                            blurRadius: 3.0,          // Shadow blur radius
+                            color: Colors.black45,     // Shadow color
+                          ),
+                        ],),
                       title: const Text(
                         'Progress',
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500,
@@ -116,7 +159,16 @@ class Fitness_Drawer extends StatelessWidget {
                   Card(
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
-                      leading: const Icon(Icons.logout,color: Colors.white,),
+                      leading:  Icon(Icons.logout, color: Colors.greenAccent.shade400,        // Icon color
+                        semanticLabel: 'Log Out', // Accessible label for screen readers
+                        textDirection: TextDirection.ltr,  // Text direction for the icon
+                        shadows: const [
+                          Shadow(
+                            offset: Offset(3.0, 3.0), // Shadow position
+                            blurRadius: 3.0,          // Shadow blur radius
+                            color: Colors.black45,     // Shadow color
+                          ),
+                        ],),
                       title: const Text(
                         'Logout',
                         style: TextStyle(
