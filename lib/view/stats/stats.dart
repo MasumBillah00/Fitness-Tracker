@@ -64,6 +64,7 @@ class StatsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16.0),
+
                   const Text(
                     'Calories Burned',
                     style: TextStyle(

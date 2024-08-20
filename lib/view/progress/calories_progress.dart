@@ -1,13 +1,14 @@
 // import 'dart:math';
 
+import 'package:fitness_tracker_app/view/progress/monthly_progress.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../bloc/workout_bloc.dart';
-import '../bloc/workout_state.dart';
-import '../model/workout_model.dart';
+import '../../bloc/workout_bloc.dart';
+import '../../bloc/workout_state.dart';
+import '../../model/workout_model.dart';
 
 class ProgressChart extends StatelessWidget {
   const ProgressChart({super.key});
@@ -179,6 +180,7 @@ class ProgressChart extends StatelessWidget {
               ),
             ),
           ),
+          const Expanded(child: MonthlyProgressChart()),
         ],
       ),
     );

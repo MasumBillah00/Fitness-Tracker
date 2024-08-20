@@ -75,16 +75,16 @@ class LoginDatabaseHelper {
     }
   }
 
-  // Update a user's password in the database
-  Future<void> updateUserPassword(int id, String newPassword) async {
-    final db = await instance.database;
-    await db.update(
-      'users',
-      {'password': newPassword},
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
+  // // Update a user's password in the database
+  // Future<void> updateUserPassword(int id, String newPassword) async {
+  //   final db = await instance.database;
+  //   await db.update(
+  //     'users',
+  //     {'password': newPassword},
+  //     where: 'id = ?',
+  //     whereArgs: [id],
+  //   );
+  // }
 
   // Delete a user from the database
   Future<void> deleteUser(int id) async {
@@ -101,4 +101,27 @@ class LoginDatabaseHelper {
     final db = await instance.database;
     db.close();
   }
+
+  // Add or ensure the existing methods to update the password
+  Future<void> updateUserPassword(String email, String newPassword) async {
+    final db = await instance.database;
+    final result = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if (result.isNotEmpty) {
+      final userId = result.first['id'];
+      await db.update(
+        'users',
+        {'password': newPassword},
+        where: 'id = ?',
+        whereArgs: [userId],
+      );
+    } else {
+      throw Exception('User not found');
+    }
+  }
+
 }

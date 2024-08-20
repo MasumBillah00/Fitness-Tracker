@@ -1,5 +1,5 @@
-import 'dart:async';
 
+import 'dart:async';
 import 'package:fitness_tracker_app/view/home_screen.dart';
 import 'package:fitness_tracker_app/view/login/registration/registration.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/login/login_bloc.dart';
 import '../../../bloc/login/login_event.dart';
 import '../../../bloc/login/login_state.dart';
+import 'forgetpassword/forget_password_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -291,25 +292,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      // Align(
-                      //   alignment: Alignment.centerRight,
-                      //   child: TextButton(
-                      //     onPressed: () {
-                      //       // Navigator.push(
-                      //       //   context,
-                      //       //   MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
-                      //       // );
-                      //     },
-                      //     child: const Text(
-                      //       'Forgot password?',
-                      //       style: TextStyle(
-                      //         color: Colors.lightBlueAccent,
-                      //         fontWeight: FontWeight.w500,
-                      //         fontSize: 16,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                            );
+                          },
+                          child: const Text(
+                            'Forgot password?',
+                            style: TextStyle(
+                              color: Colors.lightBlueAccent,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
