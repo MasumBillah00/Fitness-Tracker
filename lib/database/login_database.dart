@@ -22,7 +22,7 @@ class LoginDatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _onUpgrade);
   }
 
   // Create the database schema
@@ -31,9 +31,19 @@ class LoginDatabaseHelper {
     CREATE TABLE users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       email TEXT NOT NULL UNIQUE,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      otp TEXT
     )
     ''');
+  }
+
+  // Upgrade the database schema when the version is incremented
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('''
+      ALTER TABLE users ADD COLUMN otp TEXT
+      ''');
+    }
   }
 
   // Check if the user with the same email already exists
@@ -75,34 +85,23 @@ class LoginDatabaseHelper {
     }
   }
 
-  // // Update a user's password in the database
-  // Future<void> updateUserPassword(int id, String newPassword) async {
-  //   final db = await instance.database;
-  //   await db.update(
-  //     'users',
-  //     {'password': newPassword},
-  //     where: 'id = ?',
-  //     whereArgs: [id],
-  //   );
-  // }
-
-  // Delete a user from the database
-  Future<void> deleteUser(int id) async {
+  // Retrieve a user by email only (for OTP verification)
+  Future<Map<String, dynamic>?> getUserByEmail(String email) async {
     final db = await instance.database;
-    await db.delete(
+    final result = await db.query(
       'users',
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'email = ?',
+      whereArgs: [email],
     );
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null;
+    }
   }
 
-  // Close the database connection
-  Future close() async {
-    final db = await instance.database;
-    db.close();
-  }
-
-  // Add or ensure the existing methods to update the password
+  // Update a user's password in the database
   Future<void> updateUserPassword(String email, String newPassword) async {
     final db = await instance.database;
     final result = await db.query(
@@ -124,4 +123,41 @@ class LoginDatabaseHelper {
     }
   }
 
+  // Update the OTP for a user
+  Future<void> updateUserOtp(String email, String otp) async {
+    final db = await instance.database;
+    final result = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if (result.isNotEmpty) {
+      final userId = result.first['id'];
+      await db.update(
+        'users',
+        {'otp': otp},
+        where: 'id = ?',
+        whereArgs: [userId],
+      );
+    } else {
+      throw Exception('User not found');
+    }
+  }
+
+  // Delete a user from the database
+  Future<void> deleteUser(int id) async {
+    final db = await instance.database;
+    await db.delete(
+      'users',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Close the database connection
+  Future close() async {
+    final db = await instance.database;
+    db.close();
+  }
 }
