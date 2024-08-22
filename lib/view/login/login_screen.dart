@@ -1,14 +1,13 @@
-
-import 'dart:async';
-import 'package:fitness_tracker_app/view/home_screen.dart';
-import 'package:fitness_tracker_app/view/login/registration/registration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:fitness_tracker_app/view/screen/home_screen.dart';
+import 'package:fitness_tracker_app/view/login/registration/registration.dart';
 import '../../../bloc/login/login_bloc.dart';
 import '../../../bloc/login/login_event.dart';
 import '../../../bloc/login/login_state.dart';
+import 'finger_print_login.dart';
 import 'forgetpassword/forget_password_screen.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,18 +23,16 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
   late LoginBloc _loginBloc;
-  //bool _rememberMe = false;
-  String? _savedPassword;
-  bool _showPasswordDialog = true;
-  bool _isPasswordVisible = false;
+  final LocalAuthentication auth = LocalAuthentication();
+  bool _isFingerprintSupported = false;
 
   @override
   void initState() {
     super.initState();
     _loginBloc = context.read<LoginBloc>();
-    //_loadRememberMe();
     emailController.addListener(_handleUserInteraction);
     passwordController.addListener(_handleUserInteraction);
+    _checkFingerprintSupport();
   }
 
   @override
@@ -50,75 +47,36 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleUserInteraction() {
-    if (_showPasswordDialog && _savedPassword != null) {
-      _showPasswordDialog = false;
-      _showPasswordNotification();
+    // Handle any user interaction, if needed
+  }
+
+  Future<void> _checkFingerprintSupport() async {
+    final isSupported = await auth.canCheckBiometrics;
+    setState(() {
+      _isFingerprintSupported = isSupported;
+    });
+  }
+
+  Future<void> _authenticateWithFingerprint() async {
+    try {
+      final isAuthenticated = await auth.authenticate(
+        localizedReason: 'Scan your fingerprint to authenticate',
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: true,
+        ),
+      );
+
+      if (isAuthenticated) {
+        _loginBloc.add(LoginSubmitted()); // Assuming fingerprint authentication is successful
+      }
+    } catch (e) {
+      print('Fingerprint authentication failed: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Fingerprint authentication failed')),
+      );
     }
   }
-
-  // void _loadRememberMe() async {
-  //   final isFirstTime = await LoginDatabaseHelper().isFirstTime();
-  //   final rememberMeInfo = await LoginDatabaseHelper().loadRememberMe();
-  //   if (rememberMeInfo != null && rememberMeInfo['remember_me'] == 1) {
-  //     emailController.text = rememberMeInfo['email'];
-  //     _savedPassword = rememberMeInfo['password'];
-  //     setState(() {
-  //       _rememberMe = true;
-  //     });
-  //     // Trigger BLoC events for initial values
-  //     _loginBloc.add(EmailChanged(emailController.text));
-  //     _loginBloc.add(PasswordChanged(_savedPassword ?? ''));
-  //
-  //     if (!isFirstTime) {
-  //       _showPasswordNotification();
-  //     }
-  //   }
-  //   // Update the first-time flag after checking
-  //   await LoginDatabaseHelper().saveFirstTimeFlag(false);
-  // }
-  //
-  // void _saveRememberMe() async {
-  //   if (_rememberMe) {
-  //     await LoginDatabaseHelper().saveRememberMe(
-  //       emailController.text,
-  //       passwordController.text,
-  //       _rememberMe,
-  //     );
-  //   } else {
-  //     await LoginDatabaseHelper().clearRememberMe();
-  //   }
-  // }
-
-  void _showPasswordNotification() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Auto-fill Password?'),
-          content: Text('Do you want to fill in the saved password for ${emailController.text}?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Yes'),
-              onPressed: () {
-                if (_savedPassword != null) {
-                  passwordController.text = _savedPassword!;
-                  _loginBloc.add(PasswordChanged(_savedPassword!));
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -126,13 +84,11 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.status == LoginStatus.success) {
-            // Navigate to HomeScreen on successful login
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           } else if (state.status == LoginStatus.error) {
-            // Show error message
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
@@ -155,16 +111,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      //  Center(
-                      //   child: Text(
-                      //     'Login',
-                      //     style: TextStyle(
-                      //       fontSize: 40,
-                      //       fontWeight: FontWeight.bold,
-                      //       color: Colors.red,
-                      //     ),
-                      //   ),
-                      // ),
                       const SizedBox(height: 30),
                       TextFormField(
                         controller: emailController,
@@ -180,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                           return null;
                         },
-                        decoration:  InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Enter your email',
                           prefixIcon: Icon(Icons.email, color: Colors.blueGrey.shade900),
                           hintStyle: TextStyle(color: Colors.blueGrey.shade900),
@@ -192,13 +138,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 3.0),
                           ),
                         ),
-                        style:  TextStyle(color: Colors.blueGrey.shade900),
+                        style: TextStyle(color: Colors.blueGrey.shade900),
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: passwordController,
                         focusNode: passwordFocusNode,
-                        obscureText: !_isPasswordVisible,
+                        obscureText: true,
                         onChanged: (value) {
                           _loginBloc.add(PasswordChanged(value));
                         },
@@ -212,69 +158,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         decoration: InputDecoration(
                           hintText: 'Enter your password',
-                          prefixIcon:  Icon(Icons.lock, color: Colors.blueGrey.shade900),
-                          hintStyle:  TextStyle(color: Colors.blueGrey.shade900),
-                          enabledBorder:  OutlineInputBorder(
+                          prefixIcon: Icon(Icons.lock, color: Colors.blueGrey.shade900),
+                          hintStyle: TextStyle(color: Colors.blueGrey.shade900),
+                          enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 2.0),
                             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                           ),
-                          focusedBorder:  OutlineInputBorder(
+                          focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 3.0),
                           ),
-                          border:  OutlineInputBorder(
+                          border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blueGrey.shade900),
                           ),
-                          suffixIcon: IconButton(
-                              icon: Icon(
-                                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                color: Colors.blueGrey.shade900,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                  if (_isPasswordVisible) {
-                                    Timer(const Duration(milliseconds: 400),
-                                            () {
-                                          setState(() {
-                                            _isPasswordVisible = false;
-                                          });
-                                        });
-                                  }
-                                });
-                              }
-                          ),
                         ),
-                        style:  TextStyle(color: Colors.blueGrey.shade900),
+                        style: TextStyle(color: Colors.blueGrey.shade900),
                       ),
-                      const SizedBox(height: 2),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.start,
-                      //   children: [
-                      //     Checkbox(
-                      //       value: _rememberMe,
-                      //       onChanged: (value) {
-                      //         setState(() {
-                      //           _rememberMe = value ?? false;
-                      //         });
-                      //       },
-                      //     ),
-                      //     const Text(
-                      //       'Remember Me',
-                      //       style: TextStyle(color: Colors.white),
-                      //     ),
-                      //   ],
-                      // ),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        // style: ElevatedButton.styleFrom(
-                        //    foregroundColor: Colors.white,
-                        //  backgroundColor: Colors.blue,
-                        //   padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 10),
-                        //   shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(10),
-                        //   ),
-                        //   elevation: 5,
-                        // ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _loginBloc.add(LoginSubmitted());
@@ -292,6 +192,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 20),
+                      if (_isFingerprintSupported)
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const FingerprintSetupScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.fingerprint),
+                          label: const Text('Set up Fingerprint'),
+                        ),
+                      const SizedBox(height: 20),
+                      if (_isFingerprintSupported)
+                        ElevatedButton.icon(
+                          onPressed: _authenticateWithFingerprint,
+                          icon: const Icon(Icons.fingerprint),
+                          label: const Text('Log in with Fingerprint'),
+                        ),
                       const SizedBox(height: 5),
                       Align(
                         alignment: Alignment.centerRight,
@@ -320,17 +241,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             MaterialPageRoute(builder: (context) => const RegistrationScreen()),
                           );
                         },
-                        // style: ElevatedButton.styleFrom(
-                        //   foregroundColor: Colors.white,
-                        //   backgroundColor: Colors.green,
-                        //   padding: const EdgeInsets.symmetric(
-                        //     horizontal: 20,
-                        //     vertical: 10,
-                        //   ),
-                        //   shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(10),
-                        //   ),
-                        // ),
                         child: const Text(
                           'Create an Account',
                           style: TextStyle(

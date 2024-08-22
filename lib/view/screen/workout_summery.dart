@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/workout_bloc.dart';
-import '../bloc/workout_state.dart';
-import '../model/workout_model.dart';
+import '../../bloc/workout_bloc.dart';
+import '../../bloc/workout_state.dart';
+import '../../model/workout_model.dart';
 
 class WorkoutSummaryPage extends StatelessWidget {
   const WorkoutSummaryPage({super.key});

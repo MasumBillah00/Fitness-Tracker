@@ -1,10 +1,9 @@
 import 'package:fitness_tracker_app/reposotiry/workoutrepository.dart';
-import 'package:fitness_tracker_app/view/home_screen.dart';
+import 'package:fitness_tracker_app/view/screen/home_screen.dart';
 import 'package:fitness_tracker_app/view/login/login_screen.dart';
 import 'package:fitness_tracker_app/widget/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'bloc/forgotpassword/forgetpassword_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/login/login_state.dart';
@@ -64,66 +63,18 @@ class MyApp extends StatelessWidget {
                 );
               }
             },
-            child: const LoginScreen(), // Replace this with your main screen or wrapper
+            child: BlocBuilder<LoginBloc, LoginState>(
+              builder: (context, state) {
+                if (state.status == LoginStatus.success) {
+                  return const HomeScreen();
+                } else {
+                  return const LoginScreen();
+                }
+              },
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//
-//   // Insert the default user credentials before running the app
-//   final dbHelper = LoginDatabaseHelper.instance;
-//
-//   // Check if the user already exists
-//   final existingUser = await dbHelper.getUser('m.billahkst@gmail.com', '12345');
-//
-//   // Insert default user only if it doesn't exist
-//   if (existingUser == null) {
-//     await dbHelper.insertUser('m.billahkst@gmail.com', '12345');
-//   }
-//
-//   runApp(const MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return RepositoryProvider(
-//       create: (context) => WorkoutRepository(),
-//       child: MultiBlocProvider(
-//         providers: [
-//           BlocProvider<RegistrationBloc>(
-//             create: (context) => RegistrationBloc(
-//               databaseHelper: LoginDatabaseHelper.instance, // Provide the correct dependency
-//             ),
-//           ),
-//           BlocProvider(
-//             create: (context) => WorkoutBloc(context.read<WorkoutRepository>())
-//               ..add(LoadWorkouts()),
-//           ),
-//           BlocProvider(
-//             create: (context) => LoginBloc(LoginDatabaseHelper.instance),
-//           ),
-//
-//
-//
-//
-//         ],
-//         child: MaterialApp(
-//           debugShowCheckedModeBanner: false,
-//           title: 'Fitness Tracker App',
-//           theme: AppTheme.lightTheme,
-//           home:const LoginScreen(),
-//         ),
-//       ),
-//     );
-//   }
-// }
