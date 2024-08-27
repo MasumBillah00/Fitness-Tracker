@@ -237,8 +237,12 @@ class Fitness_Drawer extends StatelessWidget {
 
                         ),
                       ),
+                      // onTap: () {
+                      //   context.read<LoginBloc>().add(Logout()); // Pass the context here
+                      //   // No need for additional navigation here as it's handled in the BLoC
+                      // },
                       onTap: () {
-                        context.read<LoginBloc>().add(Logout());
+                        context.read<LoginBloc>().add(const Logout());
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => const LoginScreen()),
