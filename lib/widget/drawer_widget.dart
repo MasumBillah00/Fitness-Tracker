@@ -211,45 +211,26 @@ class Fitness_Drawer extends StatelessWidget {
                     color: Colors.blueGrey.shade800,
                     child: ListTile(
                       leading: Container(
-                        width: 30, // Set the width and height to control the image size
+                        width: 30,
                         height: 30,
-
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/icons/logout.png'), // Path to your image
-                            fit: BoxFit.contain, // Adjust the image to fit within the container
+                            image: AssetImage('assets/icons/logout.png'),
+                            fit: BoxFit.contain,
                           ),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.black45,  // Shadow color
-                          //     blurRadius: 3.0,        // Shadow blur radius
-                          //     offset: Offset(3.0, 3.0), // Shadow offset
-                          //   ),
-                          // ],
                         ),
                       ),
                       title: const Text(
                         'Logout',
-                        style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500,
-                          color: Colors.white
-
-                        ),
+                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
                       ),
-                      // onTap: () {
-                      //   context.read<LoginBloc>().add(Logout()); // Pass the context here
-                      //   // No need for additional navigation here as it's handled in the BLoC
-                      // },
                       onTap: () {
-                        context.read<LoginBloc>().add(const Logout());
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
-                        );
+                        context.read<LoginBloc>().add(Logout()); // Trigger the Logout event
+                        Navigator.of(context).pop(); // Close the drawer
                       },
                     ),
                   ),
+
                 ],
               ),
             ),

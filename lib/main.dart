@@ -1,6 +1,8 @@
 
-import 'package:fitness_tracker_app/reposotiry/workoutrepository.dart';
+import 'package:fitness_tracker_app/view/login/login_screen.dart';
+import 'package:fitness_tracker_app/widget/theme/apptheme.dart';
 import 'package:flutter/material.dart';
+import 'package:fitness_tracker_app/reposotiry/workoutrepository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/forgotpassword/forgetpassword_bloc.dart';
 import 'bloc/login/login_bloc.dart';
@@ -22,6 +24,7 @@ void main() async {
 
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -46,7 +49,12 @@ class MyApp extends StatelessWidget {
             create: (context) => ForgotPasswordBloc(LoginDatabaseHelper.instance),
           ),
         ],
-        child: MyAppRoot(),
+        child:MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Fitness Tracker App',
+          theme: AppTheme.lightTheme,
+          home: const LoginScreen(),
+        ),
       ),
     );
   }

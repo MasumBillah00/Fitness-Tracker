@@ -37,11 +37,13 @@ class LoginSubmitted extends LoginEvent {
   List<Object?> get props => [context];
 }
 
+
+
+class ResetTimerEvent extends LoginEvent {}
+
 class Logout extends LoginEvent {
   const Logout();  // No arguments needed
 }
-
-class ResetTimerEvent extends LoginEvent {}
 
 
 // import 'package:equatable/equatable.dart';
