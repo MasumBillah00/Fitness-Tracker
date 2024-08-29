@@ -225,8 +225,8 @@ class Fitness_Drawer extends StatelessWidget {
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
                       ),
                       onTap: () {
-                        context.read<LoginBloc>().add(Logout()); // Trigger the Logout event
-                        Navigator.of(context).pop(); // Close the drawer
+                        // context.read<LoginBloc>().add(Logout()); // Trigger the Logout event
+                        // Navigator.of(context).pop(); // Close the drawer
                       },
                     ),
                   ),

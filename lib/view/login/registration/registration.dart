@@ -144,10 +144,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         alignment: Alignment.bottomRight,
                         child: TextButton(
                             onPressed: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LoginScreen()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+                              // );
                             },
                             child: const Text('Already have an account?',
                               style: TextStyle(

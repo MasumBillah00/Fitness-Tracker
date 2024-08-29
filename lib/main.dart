@@ -1,9 +1,11 @@
 
 import 'package:fitness_tracker_app/view/login/login_screen.dart';
+import 'package:fitness_tracker_app/view/screen/home_screen.dart';
 import 'package:fitness_tracker_app/widget/theme/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness_tracker_app/reposotiry/workoutrepository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'Auth/authwrapper.dart';
 import 'bloc/forgotpassword/forgetpassword_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'bloc/registration/registration_bloc.dart';
@@ -13,14 +15,14 @@ import 'database/login_database.dart';
 import 'myapproot.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  final dbHelper = LoginDatabaseHelper.instance;
-  final existingUser = await dbHelper.getUser('m@gmail.com', '12345');
-
-  if (existingUser == null) {
-    await dbHelper.insertUser('m@gmail.com', '12345');
-  }
+  // WidgetsFlutterBinding.ensureInitialized();
+  //
+  // final dbHelper = LoginDatabaseHelper.instance;
+  // final existingUser = await dbHelper.getUser('m@gmail.com', '12345');
+  //
+  // if (existingUser == null) {
+  //   await dbHelper.insertUser('m@gmail.com', '12345');
+  // }
 
   runApp(const MyApp());
 }
@@ -35,8 +37,10 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => LoginBloc(LoginDatabaseHelper.instance),
+          create: (_) => AuthBloc(),
           ),
+
+
           BlocProvider<RegistrationBloc>(
             create: (context) => RegistrationBloc(
               databaseHelper: LoginDatabaseHelper.instance,
@@ -53,7 +57,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Fitness Tracker App',
           theme: AppTheme.lightTheme,
-          home: const LoginScreen(),
+          home: AuthWrapper(),
         ),
       ),
     );
