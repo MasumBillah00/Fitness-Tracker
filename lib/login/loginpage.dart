@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       final isAvailable = await _localAuth.canCheckBiometrics;
       if (!isAvailable) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Biometric authentication not available.')),
+          const SnackBar(content: Text('Biometric authentication not available.')),
         );
       }
     } catch (e) {
@@ -55,15 +55,17 @@ class _LoginPageState extends State<LoginPage> {
           email: _emailController.text,
           password: _passwordController.text,
         ));
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+        _startLogoutTimer();  // Start logout timer on successful login
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Authentication failed')),
+          const SnackBar(content: Text('Authentication failed')),
         );
       }
     } on PlatformException catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Authentication error occurred')),
+        const SnackBar(content: Text('Authentication error occurred')),
       );
     }
   }
@@ -79,86 +81,111 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is LoggedInState) {
-              Navigator.of(context).pushReplacementNamed('/home');
-              _startLogoutTimer();  // Start logout timer on successful login
-            } else if (state is LoginFailedState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            }
-          },
+      // appBar: AppBar(
+      //   title: const Text('Login'),
+      // ),
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is LoggedInState) {
+            Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+            _startLogoutTimer();  // Start logout timer on successful login
+          } else if (state is LoginFailedState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background1.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
           child: Form(
             key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your email',
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your password',
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                  ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters long';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<AuthBloc>().add(LoginEvent(
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                        ));
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    controller: _emailController,
+                decoration: InputDecoration(
+                          hintText: 'Enter your email',
+                          prefixIcon: Icon(Icons.email, color: Colors.blueGrey.shade900),
+                          hintStyle: TextStyle(color: Colors.blueGrey.shade900),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 2.0),
+                            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 3.0),
+                          ),
+                        ),
+                      //   style: TextStyle(color: Colors.blueGrey.shade900),
+                      // ),
+                   keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
                       }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
                     },
-                    child: Text('Login'),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: _authenticate,
-                    child: Text('Authenticate with Fingerprint'),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter your Password',
+                      prefixIcon: Icon(Icons.lock, color: Colors.blueGrey.shade900),
+                      hintStyle: TextStyle(color: Colors.blueGrey.shade900),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 2.0),
+                        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey.shade900, width: 3.0),
+                      ),
+                    ),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters long';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16.0),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<AuthBloc>().add(LoginEvent(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          ));
+                        }
+                      },
+                      child: const Text('Login'),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _authenticate,
+                      child: const Text('Authenticate with Biometric'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -168,9 +195,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void _startLogoutTimer() {
     _logoutTimer?.cancel();
-    _logoutTimer = Timer(Duration(seconds: 10), () {
+    _logoutTimer = Timer(const Duration(seconds: 10), () {
       context.read<AuthBloc>().add(LogoutEvent());
-      Navigator.of(context).pushReplacementNamed('/login');
+      Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
     });
   }
 }

@@ -12,16 +12,18 @@ import 'bloc/registration/registration_bloc.dart';
 import 'bloc/workout_bloc.dart';
 import 'bloc/workout_event.dart';
 import 'database/login_database.dart';
+import 'login/loginpage.dart';
 import 'myapproot.dart';
 
-void main() async {
+void main()  {
+  //async
   // WidgetsFlutterBinding.ensureInitialized();
   //
   // final dbHelper = LoginDatabaseHelper.instance;
-  // final existingUser = await dbHelper.getUser('m@gmail.com', '12345');
+  // final existingUser = await dbHelper.getUser('m@gmail.com', '123456');
   //
   // if (existingUser == null) {
-  //   await dbHelper.insertUser('m@gmail.com', '12345');
+  //   await dbHelper.insertUser('m@gmail.com', '123456');
   // }
 
   runApp(const MyApp());
@@ -58,6 +60,13 @@ class MyApp extends StatelessWidget {
           title: 'Fitness Tracker App',
           theme: AppTheme.lightTheme,
           home: AuthWrapper(),
+
+              routes: {
+                '/login': (context) => LoginPage(),
+                '/home': (context) => HomeScreen(), // Define your home page here
+              },
+
+
         ),
       ),
     );

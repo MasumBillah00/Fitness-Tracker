@@ -82,53 +82,31 @@
 //   // }
 // }
 
-
-
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../database.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
-import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../database/login_database.dart';
-import 'login_event.dart';
-import 'login_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final LoginDatabaseHelper _databaseHelper = LoginDatabaseHelper.instance;
+  final DatabaseHelper _databaseHelper = DatabaseHelper();
   Timer? _logoutTimer;
 
   AuthBloc() : super(LoggedOutState()) {
-    on<LoginEvent>(_onLoginEvent);
-    on<LogoutEvent>(_onLogoutEvent);
-  }
-
-  Future<void> _onLoginEvent(LoginEvent event, Emitter<AuthState> emit) async {
-    try {
-      // Check if user exists with the given email
-      final userExists = await _databaseHelper.userExists(event.email);
-      if (!userExists) {
-        emit(LoginFailedState('User does not exist'));
-        return;
-      }
-
-      // Check if the password is correct
-      final user = await _databaseHelper.getUser(event.email, event.password);
-      if (user != null) {
+    on<LoginEvent>((event, emit) async {
+      final user = await _databaseHelper.getUser(event.email);
+      if (user != null && user['password'] == event.password) {
         emit(LoggedInState());
         _startLogoutTimer();
       } else {
         emit(LoginFailedState('Invalid email or password'));
       }
-    } catch (e) {
-      emit(LoginFailedState('An error occurred: ${e.toString()}'));
-    }
-  }
+    });
 
-  void _onLogoutEvent(LogoutEvent event, Emitter<AuthState> emit) {
-    _logoutTimer?.cancel();
-    emit(LoggedOutState());
+    on<LogoutEvent>((event, emit) {
+      _logoutTimer?.cancel();
+      emit(LoggedOutState());
+    });
   }
 
   void _startLogoutTimer() {
@@ -144,5 +122,66 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return super.close();
   }
 }
+
+// import 'dart:async';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import '../../database.dart';
+// import 'login_event.dart';
+// import 'login_state.dart';
+//
+// import 'dart:async';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import '../../database/login_database.dart';
+// import 'login_event.dart';
+// import 'login_state.dart';
+// class AuthBloc extends Bloc<AuthEvent, AuthState> {
+//   final LoginDatabaseHelper _databaseHelper = LoginDatabaseHelper.instance;
+//   Timer? _logoutTimer;
+//
+//   AuthBloc() : super(LoggedOutState()) {
+//     on<LoginEvent>(_onLoginEvent);
+//     on<LogoutEvent>(_onLogoutEvent);
+//   }
+//
+//   Future<void> _onLoginEvent(LoginEvent event, Emitter<AuthState> emit) async {
+//     try {
+//       // Check if user exists with the given email
+//       final userExists = await _databaseHelper.userExists(event.email);
+//       if (!userExists) {
+//         emit(LoginFailedState('User does not exist'));
+//         return;
+//       }
+//
+//       // Check if the password is correct
+//       final user = await _databaseHelper.getUser(event.email, event.password);
+//       if (user != null) {
+//         emit(LoggedInState());
+//         _startLogoutTimer();
+//       } else {
+//         emit(LoginFailedState('Invalid email or password'));
+//       }
+//     } catch (e) {
+//       emit(LoginFailedState('An error occurred: ${e.toString()}'));
+//     }
+//   }
+//
+//   void _onLogoutEvent(LogoutEvent event, Emitter<AuthState> emit) {
+//     _logoutTimer?.cancel();
+//     emit(LoggedOutState());
+//   }
+//
+//   void _startLogoutTimer() {
+//     _logoutTimer?.cancel();
+//     _logoutTimer = Timer(Duration(seconds: 10), () {
+//       add(LogoutEvent());
+//     });
+//   }
+//
+//   @override
+//   Future<void> close() {
+//     _logoutTimer?.cancel();
+//     return super.close();
+//   }
+// }
 
 
