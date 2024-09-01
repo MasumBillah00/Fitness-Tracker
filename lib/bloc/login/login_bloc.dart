@@ -92,6 +92,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
   Timer? _logoutTimer;
 
+
+
+  void _startLogoutTimer() {
+    _logoutTimer?.cancel();
+    _logoutTimer = Timer(Duration(seconds: 10), () {
+      add(LogoutEvent());
+    });
+  }
+
   AuthBloc() : super(LoggedOutState()) {
     on<LoginEvent>((event, emit) async {
       final user = await _databaseHelper.getUser(event.email);
@@ -105,14 +114,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<LogoutEvent>((event, emit) {
       _logoutTimer?.cancel();
+      //await _clearSession(); // Custom method to clear session data
+      //emit(LoggedOutState());
       emit(LoggedOutState());
-    });
-  }
-
-  void _startLogoutTimer() {
-    _logoutTimer?.cancel();
-    _logoutTimer = Timer(Duration(seconds: 10), () {
-      add(LogoutEvent());
     });
   }
 

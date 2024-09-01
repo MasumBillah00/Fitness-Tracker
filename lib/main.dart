@@ -61,10 +61,10 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           home: AuthWrapper(),
 
-              routes: {
-                '/login': (context) => LoginPage(),
-                '/home': (context) => HomeScreen(), // Define your home page here
-              },
+              // routes: {
+              //   '/login': (context) => LoginPage(),
+              //   '/home': (context) => HomeScreen(), // Define your home page here
+              // },
 
 
         ),

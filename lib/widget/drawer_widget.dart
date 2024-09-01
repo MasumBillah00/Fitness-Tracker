@@ -225,11 +225,36 @@ class Fitness_Drawer extends StatelessWidget {
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
                       ),
                       onTap: () {
-                        // context.read<LoginBloc>().add(Logout()); // Trigger the Logout event
-                        // Navigator.of(context).pop(); // Close the drawer
+                        context.read<AuthBloc>().add(LogoutEvent()); // Trigger the Logout event
+                        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false); // Navigate to the login screen
                       },
                     ),
                   ),
+
+
+                  // Card(
+                  //   color: Colors.blueGrey.shade800,
+                  //   child: ListTile(
+                  //     leading: Container(
+                  //       width: 30,
+                  //       height: 30,
+                  //       decoration: const BoxDecoration(
+                  //         image: DecorationImage(
+                  //           image: AssetImage('assets/icons/logout.png'),
+                  //           fit: BoxFit.contain,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     title: const Text(
+                  //       'Logout',
+                  //       style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
+                  //     ),
+                  //     onTap: () {
+                  //       // context.read<LoginBloc>().add(Logout()); // Trigger the Logout event
+                  //       // Navigator.of(context).pop(); // Close the drawer
+                  //     },
+                  //   ),
+                  // ),
 
                 ],
               ),
