@@ -1,3 +1,50 @@
+
+import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../database.dart';
+import 'login_event.dart';
+import 'login_state.dart';
+
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final DatabaseHelper _databaseHelper = DatabaseHelper();
+  Timer? _logoutTimer;
+
+
+
+  void _startLogoutTimer() {
+    _logoutTimer?.cancel();
+    _logoutTimer = Timer(Duration(seconds: 60), () {
+      add(LogoutEvent());
+    });
+  }
+
+  AuthBloc() : super(LoggedOutState()) {
+    on<LoginEvent>((event, emit) async {
+      final user = await _databaseHelper.getUser(event.email);
+      if (user != null && user['password'] == event.password) {
+        emit(LoggedInState());
+        _startLogoutTimer();
+      } else {
+        emit(LoginFailedState('Invalid email or password'));
+      }
+    });
+
+    on<LogoutEvent>((event, emit) {
+      _logoutTimer?.cancel();
+      //await _clearSession(); // Custom method to clear session data
+      //emit(LoggedOutState());
+      emit(LoggedOutState());
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _logoutTimer?.cancel();
+    return super.close();
+  }
+}
+
+
 // import 'dart:async';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import '../../database/login_database.dart';
@@ -82,50 +129,6 @@
 //   // }
 // }
 
-import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../database.dart';
-import 'login_event.dart';
-import 'login_state.dart';
-
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
-  Timer? _logoutTimer;
-
-
-
-  void _startLogoutTimer() {
-    _logoutTimer?.cancel();
-    _logoutTimer = Timer(Duration(seconds: 10), () {
-      add(LogoutEvent());
-    });
-  }
-
-  AuthBloc() : super(LoggedOutState()) {
-    on<LoginEvent>((event, emit) async {
-      final user = await _databaseHelper.getUser(event.email);
-      if (user != null && user['password'] == event.password) {
-        emit(LoggedInState());
-        _startLogoutTimer();
-      } else {
-        emit(LoginFailedState('Invalid email or password'));
-      }
-    });
-
-    on<LogoutEvent>((event, emit) {
-      _logoutTimer?.cancel();
-      //await _clearSession(); // Custom method to clear session data
-      //emit(LoggedOutState());
-      emit(LoggedOutState());
-    });
-  }
-
-  @override
-  Future<void> close() {
-    _logoutTimer?.cancel();
-    return super.close();
-  }
-}
 
 // import 'dart:async';
 // import 'package:flutter_bloc/flutter_bloc.dart';
