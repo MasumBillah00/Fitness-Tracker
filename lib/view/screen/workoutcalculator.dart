@@ -114,7 +114,8 @@ class _WorkoutCalculatorState extends State<WorkoutCalculator> {
   void dispose() {
     _durationController.dispose();
     _caloriesController.dispose();
-    _timerManager.cancelTimer(); // Cancel timer on dispose
+    // _timerManager.cancelTimer(); // Cancel timer on dispose
+    _timerManager.dispose();
     super.dispose();
   }
 

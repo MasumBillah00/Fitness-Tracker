@@ -17,28 +17,37 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with WidgetsBindingObserver {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final LocalAuthentication _localAuth = LocalAuthentication();
-  // Timer? _logoutTimer;
-  // int _remainingTime = 10; // Time in seconds for countdown
   late TimerManager _timerManager;
 
   @override
   void initState() {
     super.initState();
-    _checkBiometrics();
     _timerManager = TimerManager(
-        context: context,
-        initialTime: 60,
-        onTick: _updateTimerDisplay
-
+      context: context,
+      initialTime: 60,
+      onTick: _updateTimerDisplay,
     );
+    WidgetsBinding.instance.addObserver(this); // Add observer to listen for app lifecycle changes
   }
+
   void _updateTimerDisplay() {
     setState(() {}); // Trigger a rebuild to update the timer display
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      // Start the inactivity timer when app becomes inactive
+      _timerManager.startInactivityTimer();
+    } else if (state == AppLifecycleState.resumed) {
+      // Reset timers when the app becomes active
+      _timerManager.resetTimers();
+    }
   }
 
   Future<void> _checkBiometrics() async {
@@ -83,30 +92,15 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // void _startLogoutTimer() {
-  //   _logoutTimer?.cancel();
-  //   _remainingTime = 10;
-  //   _logoutTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     if (_remainingTime > 0) {
-  //       setState(() {
-  //         _remainingTime--;
-  //       });
-  //     } else {
-  //       timer.cancel();
-  //       context.read<AuthBloc>().add(LogoutEvent());
-  //       Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-  //     }
-  //   });
-  // }
-
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-   // _logoutTimer?.cancel();
-    _timerManager.cancelTimer(); // Cancel timer on dispose
+    _timerManager.dispose(); // Dispose the timer manager
+    WidgetsBinding.instance.removeObserver(this); // Remove the observer
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,8 +109,7 @@ class _LoginPageState extends State<LoginPage> {
         listener: (context, state) {
           if (state is LoggedInState) {
             Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-            //_startLogoutTimer();
-            _timerManager;
+            _timerManager.startLogoutTimer(); // Start timer using TimerManager
           } else if (state is LoginFailedState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
@@ -217,18 +210,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            // Positioned(
-            //   top: 10,
-            //   right: 10,
-            //   child: Text(
-            //     'Time left: $_remainingTime seconds',
-            //     style: const TextStyle(
-            //       fontSize: 16,
-            //       fontWeight: FontWeight.bold,
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
